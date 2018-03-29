@@ -1,18 +1,105 @@
-<ion-header>
+<!-- <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Home</ion-title>
-  </ion-navbar>
+    <div class="header_left">
+      <button ion-button menuToggle>
+         <ion-icon name="menu"></ion-icon>
+      </button>
+  </div>
+
+  <div class="logo">
+    <img src="assets/imgs/homelogo.png" alt="Blooddonor App">
+  </div>
+  <div class="header_right"> 
+     <a href="#"> <img src="assets/imgs/entry_icon.png" alt="Blooddonor App"> </a>
+  </div>
+</ion-navbar>
+
 </ion-header>
 
 <ion-content padding>
   <h3>Ionic Menu Starter</h3>
-
   <p>
     If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
   </p>
-
   <button ion-button secondary menuToggle>Toggle Menu</button>
+</ion-content> -->
+
+<ion-header>
+  <ion-navbar>
+    <div class="header_left">
+      <button ion-button menuToggle>
+         <ion-icon name="menu"></ion-icon>
+      </button>
+  </div>
+
+  <div class="logo">
+    <img src="assets/imgs/logo.png" alt="Blooddonor App">
+  </div>
+  <div class="header_right"> 
+     <a href="#"> <img src="assets/imgs/entry_icon.png" alt="Blooddonor App"> </a>
+  </div>
+</ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+<div class="banner">
+ <img src="assets/imgs/banner_img.png" alt="Blooddonor App" /> 
+ <div class="banner_text"><h1>Give Blood Give Life!</h1></div>
+</div>
+
+ <div class="home_blk_one">
+   <div class="hme_grid">
+     <div class="hme_grid_img"><a href="#"><img src="assets/imgs/find_donor.png" alt="Blooddonor App"/></a></div>
+     <h2><a href="#" (click)="gotoDonorListPage()">Find a Donor</a></h2>
+   </div>
+   <div class="hme_grid">
+      <div class="hme_grid_img"><a href="#"><img src="assets/imgs/reg_donor.png" alt="Blooddonor App"/></a></div>
+      <h2><a href="#" (click)="gotoDonorRegisterPage()">Register as Donor</a></h2>
+    </div>
+    <div class="hme_grid">
+        <div class="hme_grid_img"><a href="#"><img src="assets/imgs/panic.png" alt="Blooddonor App"/></a></div>
+        <h2><a href="#">Panic</a></h2>
+      </div>
+ </div>
+
+<div class="home_blk_two">
+  <h2>Recent Blood Need</h2>
+  <div class="home_blk_white">
+    <div class="hme_recent_blood_donor" *ngFor="let seeker of seekerData">
+      <div class="hme_blood_name"><h1 class="bplus">{{seeker.Blood_Group}}</h1></div>
+      <div class="hme_blood_content">
+        <ul>
+          <li>Name : <span>{{seeker.Name}}</span></li> 
+          <li>Age : <span>{{seeker.Age}}</span></li>
+          <li>Date : <span>{{seeker.Date | date: 'dd.MM.yyyy'}}</span></li>
+          <li>City :<span> {{seeker.City}}</span></li>
+        </ul>
+        <p class="hme_para_cont blood_unit">Units : {{seeker.Units}}</p>
+        <p class="hme_para_cont phone">{{seeker.Contact_Number}}</p>
+      </div>  
+    </div>
+  </div>
+</div>
+<div class="home_blk_three">
+  <h2>Recent Register Donors</h2>
+  <div class="home_blk_white">
+      <div class="hme_recent_reg_donor" *ngFor="let donor of donorData">
+        <div class="hme_donor_img"><img src={{IMG_URL}}{{donor.Image}} alt="Blooddonor App"> </div>
+        <div class="hme_donor_info">
+          <ul>
+            <li>Name : <span>{{donor.Name}}</span></li> 
+            <li>D O B : <span>{{convertDate(donor.Date_of_birth)}}</span></li>             
+            <li>Blood : <span>{{donor.Blood_group}}</span></li>
+            <li>City :<span> {{donor.City}}</span></li>
+          </ul>
+          <p class="hme_para_cont mail">{{donor.Email}}</p>
+          <p class="hme_para_cont phone">{{donor.Contact_number}}</p>
+        </div>  
+      </div>
+  </div>
+</div>
 </ion-content>
+
+
+
