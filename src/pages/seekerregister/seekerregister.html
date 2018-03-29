@@ -1,0 +1,56 @@
+<ion-header>
+
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Seeker Register</ion-title>
+  </ion-navbar>
+
+</ion-header>
+<ion-content padding>
+  <form [formGroup]="seekerRegisterForm" (ngSubmit)="addSeekerRegister()">
+    <h3 class="head-title">Login</h3>
+    <div formGroupName="seekerData">
+      <div class="form-group">
+        <label class="label-name" for="name">Name</label>
+        <input type="text" id="name" formControlName="name" placeHolder="Please enter name" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="label-name" for="name">User Name</label>
+        <input type="text" id="userName" formControlName="userName" placeHolder="Please enter name" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="label-name" for="password">Password</label>
+        <input type="password" id="password" formControlName="password" placeHolder="Please enter password" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="label-name" for="password">Confirm Password</label>
+        <input type="password" id="confirmPassword" formControlName="confirmPassword" placeHolder="Please enter password" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="label-name" for="password">State</label>
+        <input type="password" id="state" formControlName="state" placeHolder="Please enter password" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="label-name" for="name">City</label>
+        <input type="text" id="city" formControlName="city" placeHolder="Please enter name" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="label-name" for="name">Contact Number</label>
+        <input type="text" id="contactNumber" formControlName="contactNumber" placeHolder="Please enter name" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="label-name" for="email">Email</label>
+        <input type="text" id="email" formControlName="email" placeHolder="Please enter Email Id" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="label-name" for="name">Contact Number</label>
+        <input type="text" id="country" formControlName="country" placeHolder="Please enter name" class="form-control">
+      </div>
+
+    </div>
+    <button class="btn btn-primary login-submit" type="submit">Regiter</button>
+
+  </form>
+</ion-content>

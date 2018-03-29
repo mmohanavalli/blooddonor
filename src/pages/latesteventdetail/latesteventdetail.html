@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-navbar hideBackButton="true">
+    <div class="header_left">
+      <button ion-button menuToggle >
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </div>
+    <div class="header_center"> 
+    <ion-title>Latest Events</ion-title>
+    </div>
+    <div class="header_right">
+      <a href="#" class="back_btn" (click)="goBack()">Back</a>
+    </div>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+<div class="lastest_event_detail" *ngFor="let eventDetail of allEventsDetail">
+  <h2 innerHTML="{{eventDetail.Description}}">Excepteur sint occaecat cupidatat</h2>  
+  <ul class="date_event_det">
+    <li class="evn_date" >{{convertDate(eventDetail.Event_Date)}}, {{convertMonth(eventDetail.month)}} {{eventDetail.year}}</li>
+    <li class="evn_city">{{ eventDetail.City }}</li>
+  </ul>
+  <div class="event_det_cont">
+    <p innerHTML="{{eventDetail.des}}"></p>   
+  </div>
+</div>
+</ion-content>
