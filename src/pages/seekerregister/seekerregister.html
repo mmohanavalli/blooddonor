@@ -1,56 +1,95 @@
 <ion-header>
-
   <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Seeker Register</ion-title>
-  </ion-navbar>
-
-</ion-header>
-<ion-content padding>
-  <form [formGroup]="seekerRegisterForm" (ngSubmit)="addSeekerRegister()">
-    <h3 class="head-title">Login</h3>
-    <div formGroupName="seekerData">
-      <div class="form-group">
-        <label class="label-name" for="name">Name</label>
-        <input type="text" id="name" formControlName="name" placeHolder="Please enter name" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="name">User Name</label>
-        <input type="text" id="userName" formControlName="userName" placeHolder="Please enter name" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="password">Password</label>
-        <input type="password" id="password" formControlName="password" placeHolder="Please enter password" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="password">Confirm Password</label>
-        <input type="password" id="confirmPassword" formControlName="confirmPassword" placeHolder="Please enter password" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="password">State</label>
-        <input type="password" id="state" formControlName="state" placeHolder="Please enter password" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="name">City</label>
-        <input type="text" id="city" formControlName="city" placeHolder="Please enter name" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="name">Contact Number</label>
-        <input type="text" id="contactNumber" formControlName="contactNumber" placeHolder="Please enter name" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="email">Email</label>
-        <input type="text" id="email" formControlName="email" placeHolder="Please enter Email Id" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="name">Contact Number</label>
-        <input type="text" id="country" formControlName="country" placeHolder="Please enter name" class="form-control">
-      </div>
-
+    <div class="header_left">
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
     </div>
-    <button class="btn btn-primary login-submit" type="submit">Regiter</button>
+    <div class="header_center">
+      <ion-title>Seeker Register</ion-title>
+    </div>
+    <div class="header_right">
+      <a href="#" class="back_btn">Back</a>
+    </div>
+  </ion-navbar>
+</ion-header>
 
-  </form>
+<ion-content padding>
+  <div class="register">
+    <h1>Enter information of all fields</h1>
+    <form [formGroup]="seekerRegisterForm" (ngSubmit)="addSeekerRegister()">
+      <ion-list formGroupName="seekerData">
+        <ion-item class="form-group">
+          <ion-input type="text" formControlName="name" placeholder="Name" class="form-control">></ion-input>
+        </ion-item>
+       
+        <span *ngIf="!seekerRegisterForm.get('seekerData.name').valid && seekerRegisterForm.get('seekerData.name').touched"
+          class="error_msg">Please fill the name</span>
+
+        <ion-item class="form-group">
+          <ion-input type="text" formControlName="username" placeholder="Username" class="form-control"></ion-input>>
+        </ion-item>
+
+        <span *ngIf="!seekerRegisterForm.get('seekerData.username').valid && seekerRegisterForm.get('seekerData.username').touched"
+          class="error_msg">Please fill the user name </span>
+
+        <ion-item class="form-group">
+          <ion-input type="password" formControlName="password" placeholder="Password" class="form-control"></ion-input>>
+        </ion-item>
+
+        <span *ngIf="!seekerRegisterForm.get('seekerData.password').valid && seekerRegisterForm.get('seekerData.password').touched"
+          class="error_msg">Please fill the password</span>
+
+        <ion-item class="form-group">
+          <ion-input type="password" formControlName="confirmPassword" placeholder="Confirm Password" class="form-control"></ion-input>>
+        </ion-item>
+        <span *ngIf="!seekerRegisterForm.get('seekerData.confirmPassword').valid && seekerRegisterForm.get('seekerData.confirmPassword').touched"
+          class="error_msg">Please fill the confirm password</span>
+
+        <div class="alert alert-danger alretBox" role="alert" *ngIf="!isPassword">
+            {{passwordError}}
+        </div>
+        <ion-item class="form-group">
+          <ion-input type="text" formControlName="state" placeholder="State" class="form-control"></ion-input>
+        </ion-item>
+        <span *ngIf="!seekerRegisterForm.get('seekerData.state').valid && seekerRegisterForm.get('seekerData.state').touched"
+          class="error_msg">Please fill the state</span>
+
+        <ion-item class="form-group">
+          <ion-input type="text" formControlName="city" placeholder="City" class="form-control"></ion-input>
+        </ion-item>
+
+        <span *ngIf="!seekerRegisterForm.get('seekerData.city').valid && seekerRegisterForm.get('seekerData.city').touched"
+          class="error_msg">Please fill the city</span>
+
+        <ion-item class="form-group">
+          <ion-input type="tel" maxlength=“10” formControlName="contactnumber" (ionChange)="onContactNumberChange($event)" placeholder="Contact number" class="form-control"></ion-input>
+        </ion-item>
+        <div class="alert alert-danger alretBox" role="alert" *ngIf="isNumber">
+            {{numberError}}
+        </div>
+        <span *ngIf="!seekerRegisterForm.get('seekerData.contactnumber').valid && seekerRegisterForm.get('seekerData.contactnumber').touched"
+          class="error_msg">Please enter at least 10 numbers.</span>
+
+        <ion-item class="form-group">
+          <ion-input type="text" id="email" formControlName="email" placeholder="Email" class="form-control"></ion-input>
+        </ion-item>
+        <span *ngIf="!seekerRegisterForm.get('seekerData.email').valid && seekerRegisterForm.get('seekerData.email').touched"
+          class="error_msg">Please fill the email</span>
+
+        <ion-item class="form-group">
+          <ion-label>Country</ion-label>
+          <ion-select id="country" formControlName="country" (ionChange)="onCountryChange()" class="form-control">
+            <ion-option *ngFor="let country of countries" [value]="country">{{country}}</ion-option>
+          </ion-select>
+        </ion-item>
+        <span *ngIf="!seekerRegisterForm.get('seekerData.country').valid && seekerRegisterForm.get('seekerData.country').touched"
+          class="error_msg">Please select the country</span>
+
+        <ion-item class="red_btn">
+          <button class="submit_btn" [disabled]="!seekerRegisterForm.valid" type="submit">Submit</button>
+        </ion-item>
+      </ion-list>
+    </form>
+  </div>
 </ion-content>

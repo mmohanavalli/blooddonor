@@ -1,7 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { NavController, NavParams, Platform } from 'ionic-angular';
+import { NavController, NavParams, Platform, LoadingController } from 'ionic-angular';
 import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
 import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
+import { HomePage } from '../home/home';
+import { OfflinePage } from '../offline/offline';
+import { Network } from '@ionic-native/network';
 declare var google;
 
 @Component({
@@ -21,8 +24,34 @@ export class NearestbloodbanksPage {
 
   selectedItem: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public maps: GoogleMapsProvider, private geolocation: Geolocation,
-    public platform: Platform) {
+    public platform: Platform, public loadingCtrl: LoadingController, private network: Network) {
     this.selectedItem = navParams.get('item');
+  }
+
+  ionViewDidLoad() {
+    this.network.onDisconnect().subscribe(data => {
+      console.log("Network Status"+data.type);
+      if(data.type == "offline"){
+        console.log("offline page");
+        this.navCtrl.push(OfflinePage);
+      }
+    }, error => console.error(error));
+  }
+
+  ionViewDidEnter() {
+    let loader = this.loadingCtrl.create({
+      content: 'Please wait ...',
+    });
+    
+    loader.present().then(() => {
+    this.getUserPosition();
+    });
+
+    loader.dismiss();
+  }
+  
+  goback() {
+    this.navCtrl.setRoot(HomePage);
   }
 
   getUserPosition() {
@@ -39,12 +68,9 @@ export class NearestbloodbanksPage {
 
     }, (err: PositionError) => {
       console.log("error : " + err.message);
+      this.navCtrl.push(OfflinePage); 
     });
-  }
-
-  ionViewDidEnter() {
-    this.getUserPosition();
-  }
+  }  
 
   addMap(lat, long) {
 
@@ -52,13 +78,13 @@ export class NearestbloodbanksPage {
 
     let mapOptions = {
       center: latLng,
-      zoom: 15,
+      zoom: 13,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
 
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
-    this.getRestaurants(latLng).then((results: Array<any>) => {
+    this.getBloodBanks(latLng).then((results: Array<any>) => {
       this.places = results;
       for (let i = 0; i < results.length; i++) {
         this.createMarker(results[i]);
@@ -93,13 +119,16 @@ export class NearestbloodbanksPage {
     console.log(marker);
   }
 
-  getRestaurants(latLng) {
-    var service = new google.maps.places.PlacesService(this.map);
+  getBloodBanks(latLng) {
+   
     let request = {
       location: latLng,
-      radius: 5000,
-      types: ["bloodbank"]
+      radius: 6000,
+				name: "Blood bank",
+      types: ['health,','establishment']      
     };
+
+    var service = new google.maps.places.PlacesService(this.map);
     return new Promise((resolve, reject) => {
       service.nearbySearch(request, function (results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -133,16 +162,6 @@ export class NearestbloodbanksPage {
       infoWindow.open(this.map, marker);
     });
 
-  }
-
-  // ionViewDidLoad(){
-
-  //   this.platform.ready().then(() => {
-
-  //       let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement);
-
-  //   });
-
-  // }
+  }  
 
 }

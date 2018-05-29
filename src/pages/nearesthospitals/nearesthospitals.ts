@@ -1,7 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { NavController, NavParams, Platform } from 'ionic-angular';
+import { NavController, NavParams, Platform, LoadingController } from 'ionic-angular';
 import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
 import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
+import { HomePage } from '../home/home';
+import { OfflinePage } from '../offline/offline';
+import { Network } from '@ionic-native/network';
 
 declare var google;
 
@@ -23,12 +26,26 @@ export class NearesthospitalsPage {
 
   selectedItem: any;
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    public maps: GoogleMapsProvider,
-    private geolocation: Geolocation,
+    public maps: GoogleMapsProvider,public loadingCtrl: LoadingController,
+    private geolocation: Geolocation,private network: Network,
     public platform: Platform) {
     this.selectedItem = navParams.get('item');
   }
 
+  goback() {
+    this.navCtrl.setRoot(HomePage);
+  }
+
+  ionViewDidLoad() {
+    this.network.onDisconnect().subscribe(data => {
+      console.log("Network Status"+data.type);
+      if(data.type == "offline"){
+        console.log("offline page");
+        this.navCtrl.push(OfflinePage);
+      }
+    }, error => console.error(error));
+  }
+  
   getUserPosition() {
 
     this.options = {
@@ -43,11 +60,20 @@ export class NearesthospitalsPage {
 
     }, (err: PositionError) => {
       console.log("error : " + err.message);
+      this.navCtrl.push(OfflinePage); 
     });
   }
 
   ionViewDidEnter() {
+    let loader = this.loadingCtrl.create({
+      content: 'Please wait ...',
+    });
+    
+    loader.present().then(() => {
     this.getUserPosition();
+    });
+
+    loader.dismiss();
   }
 
   addMap(lat, long) {
@@ -56,13 +82,13 @@ export class NearesthospitalsPage {
 
     let mapOptions = {
       center: latLng,
-      zoom: 15,
+      zoom: 13,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
 
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
-    this.getRestaurants(latLng).then((results: Array<any>) => {
+    this.getHospitals(latLng).then((results: Array<any>) => {
       this.places = results;
       for (let i = 0; i < results.length; i++) {
         this.createMarker(results[i]);
@@ -98,7 +124,7 @@ export class NearesthospitalsPage {
     console.log(marker);
   }
 
-  getRestaurants(latLng) {
+  getHospitals(latLng) {
     var service = new google.maps.places.PlacesService(this.map);
     let request = {
       location: latLng,

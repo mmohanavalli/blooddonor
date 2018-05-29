@@ -1,20 +1,18 @@
-<!--
-  Generated template for the NearesthospitalsPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
+  <ion-navbar hideBackButton="true">
+    <div class="header_left">
       <button ion-button menuToggle>
-          <ion-icon name="menu"></ion-icon>
-        </button>
-    <ion-title>nearesthospitals</ion-title>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </div>
+    <div class="header_center"> 
+    <ion-title>Hospitals</ion-title>
+    </div>
+    <div class="header_right">
+      <a href="#" class="back_btn" (click)="goback()">Back</a>
+    </div>
   </ion-navbar>
-
 </ion-header>
-
 
 <ion-content padding>
  
