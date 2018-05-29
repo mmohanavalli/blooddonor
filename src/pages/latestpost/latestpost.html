@@ -1,21 +1,45 @@
-<!--
-  Generated template for the LatestpostPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-      <button ion-button menuToggle>
+    <ion-navbar hideBackButton="true">
+      <div class="header_left">
+        <button ion-button menuToggle>
           <ion-icon name="menu"></ion-icon>
         </button>
-    <ion-title>latestpost</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
-<ion-content padding>
-
-</ion-content>
+      </div>
+      <div class="header_center"> 
+      <ion-title>Latest Post</ion-title>
+      </div>
+      <div class="header_right">
+        <a href="#" class="back_btn" (click)="goback()">Back</a>
+      </div>
+    </ion-navbar>
+  </ion-header>
+  
+  <ion-content padding>
+  <div class="donors_page">    
+    <div class="donor_list_info" *ngFor="let post of postList" (click)="gotoLatestEventDetailPage(donor.id)">
+      <div class="donor_list_grid one">
+        <div class="donor_list_img">
+          <div class="hme_blood_name">
+            <!-- <h1 class="bplus">{{post.Blood_Group}}</h1> -->
+            <img [src]="getBloodGroupImage(post.Blood_Group)">
+          </div>
+        </div>
+        <ul>
+        <li>Name : <span>{{ post.Name }}</span></li>
+        <li>Age : <span>{{post.Age}}</span></li>
+        </ul>
+      </div>
+      <div class="donor_list_grid two">
+        <ul>   
+        <li>Date : <span>{{ post.Need_Date }}</span></li>
+        <li>City : <span> {{ post.City }}</span></li>
+        </ul>
+      </div>
+      <div class="donor_list_grid three">
+        <p class="hme_para_cont mail">{{ post.Email }}</p>
+        <p class="hme_para_cont phone">{{ post.Contact_Number }}</p>
+      </div>  
+    </div> 
+  </div>
+  </ion-content>
+  

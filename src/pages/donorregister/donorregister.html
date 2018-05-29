@@ -1,77 +1,198 @@
 <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Donor Register</ion-title>
-  </ion-navbar>
-
-</ion-header>
-<ion-content padding>
-  <form [formGroup]="donorRegisterForm" (ngSubmit)="addDonorRegister()">
-    <h3 class="head-title">Login</h3>
-    <div formGroupName="seekerData">
-      <div class="form-group">
-        <label class="label-name" for="name">Name</label>
-        <input type="text" id="name" formControlName="name" placeHolder="Please enter name" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="name">User Name</label>
-        <input type="text" id="userName" formControlName="userName" placeHolder="Please enter name" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="password">Password</label>
-        <input type="password" id="password" formControlName="password" placeHolder="Please enter password" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="password">Confirm Password</label>
-        <input type="password" id="confirmPassword" formControlName="confirmPassword" placeHolder="Please enter password" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="password">State</label>
-        <input type="password" id="state" formControlName="state" placeHolder="Please enter password" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="name">City</label>
-        <input type="text" id="city" formControlName="city" placeHolder="Please enter name" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="name">Contact Number</label>
-        <input type="text" id="contactNumber" formControlName="contactNumber" placeHolder="Please enter name" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="email">Email</label>
-        <input type="text" id="email" formControlName="email" placeHolder="Please enter Email Id" class="form-control">
-      </div>
-      <div class="form-group">
-        <label class="label-name" for="name">Contact Number</label>
-        <input type="text" id="country" formControlName="country" placeHolder="Please enter name" class="form-control">
-      </div>
-      <!-- <div class="form-group">
-        <label class="label-name" for="name">User File</label>
-        <input type="file" id="userfile" formControlName="userfile" (change)="changeListener($event)" placeHolder="Please enter name" class="form-control">
-
-        <input id="userfile" formControlName="userfile" type="file" (change)="selectFile($event)" name="single_fileup" class="form-control" />
-      </div> -->
-
+  <ion-navbar hideBackButton="true">
+    <div class="header_left">
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
     </div>
-    
-        <ion-item>
-            <input type="file" id="userfile"  (change)="addDonorRegister($event)" placeHolder="Please enter name" >
+    <div class="header_center">
+      <ion-title>Register</ion-title>
+    </div>
+    <div class="header_right">
+      <a href="#" class="back_btn" (click)="goback()">Back</a>
+    </div>
+  </ion-navbar>
+</ion-header>
 
-          <p>{{imageURI}}</p>
-          <button ion-button color="secondary" (click)="getImage()">Get Image</button>
+<ion-content padding>
+  <div class="register">
+    <h1>Enter information of all fields</h1>
+    <form [formGroup]="donorRegisterForm" (ngSubmit)="addDonorRegister()">
+      <ion-list>
+        <ion-item class="form-group">
+          <ion-input type="text" formControlName="name" placeholder="Name" class="form-control">></ion-input>
         </ion-item>
-        <ion-item>
-          <h4>Image Preview</h4>
-          <img src="{{imageFileName}}" *ngIf="imageFileName" alt="Ionic File" width="300" />
-        </ion-item>
-        <ion-item>
-          <button ion-button (click)="uploadFile()">Upload</button>
-        </ion-item>
-        
-     
-    <button class="btn btn-primary login-submit" type="submit">Regiter</button>
 
-  </form>
+        <span *ngIf="!donorRegisterForm.get('name').valid && donorRegisterForm.get('name').touched" class="error_msg">Please fill the name</span>
+
+        <ion-item class="form-group">
+          <ion-input type="text" formControlName="username" placeholder="Username" class="form-control"></ion-input>>
+        </ion-item>
+
+        <span *ngIf="!donorRegisterForm.get('username').valid && donorRegisterForm.get('username').touched" class="error_msg">This field is required.</span>
+
+        <ion-item class="form-group">
+          <ion-input type="password" formControlName="password" placeholder="Password" class="form-control"></ion-input>>
+        </ion-item>
+
+        <span *ngIf="!donorRegisterForm.get('password').valid && donorRegisterForm.get('password').touched" class="error_msg">This field is required.</span>
+
+        <ion-item class="form-group">
+          <ion-input type="password" formControlName="confirmPassword" placeholder="Confirm Password" class="form-control"></ion-input>>
+        </ion-item>
+
+        <span *ngIf="!donorRegisterForm.get('confirmPassword').valid && donorRegisterForm.get('confirmPassword').touched" class="error_msg">This field is required.</span>
+
+        <div class="alert alert-danger alretBox" role="alert" *ngIf="!isPassword">
+          {{passwordError}}
+        </div>
+<div>
+        <!-- <ion-item class="form-group"> -->
+          <!-- <ion-label>Date-of-birth</ion-label> -->
+          <label>Filter</label>
+          <!-- <ion-datetime formControlName="dob" displayFormat="MM-DD-YYYY" class="form-control"></ion-datetime>> -->
+          <my-date-picker name="mydate" [options]="myDatePickerOptions" placeholder="- Op datum -"
+                formControlName="dob"></my-date-picker>
+        <!-- </ion-item> -->
+      </div>
+        <span *ngIf="!donorRegisterForm.get('dob').valid && donorRegisterForm.get('dob').touched" class="error_msg">This field is required.</span>
+
+        <ion-item class="form-group">
+          <ion-input type="text" formControlName="age" placeholder="age" class="form-control"></ion-input>>
+        </ion-item>
+
+        <span *ngIf="!donorRegisterForm.get('age').valid && donorRegisterForm.get('age').touched" class="error_msg">This field is required.</span>
+
+        <ion-item class="form-group">
+          <ion-label>Blood group</ion-label>
+          <ion-select id="blooggroup" formControlName="bloodgroup" (ionChange)="onBloodGroupChange()" class="form-control">
+            <ion-option *ngFor="let bloodgroup of bloodGroups" [value]="bloodgroup">{{bloodgroup}}</ion-option>
+          </ion-select>
+        </ion-item>
+
+        <span *ngIf="!donorRegisterForm.get('bloodgroup').valid && donorRegisterForm.get('bloodgroup').touched" class="error_msg">This field is required.</span>
+
+        <!-- <div class="radio-group form-group">
+            <ion-label>Gender :</ion-label>
+              <ion-item>
+                <ion-radio id="" formControlName="gender" value="Male" name="gender" checked class="form-control"></ion-radio>
+                <ion-label>Male</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-radio id="" formControlName="gender" value="Female" name="gender" class="form-control"></ion-radio> 
+                <ion-label>Female</ion-label> 
+              </ion-item>
+           </div>    -->
+        <div class="radio-group form-group">
+          <ion-label>Gender :</ion-label>
+          <div class="row">
+            <label class="md-check">
+              <input type="radio" value="male" name="gender" formControlName="gender">
+              <i></i>
+              Male
+            </label>
+            <label class="md-check">
+              <input type="radio" value="female" name="gender" formControlName="gender">
+              <i></i> Female
+            </label>
+          </div>
+        </div>
+
+        <span *ngIf="!donorRegisterForm.get('gender').valid && donorRegisterForm.get('gender').touched" class="error_msg">This field is required.</span>
+
+        <ion-item class="form-group">
+          <ion-input type="text" formControlName="weight" placeholder="Weight" class="form-control"></ion-input>
+        </ion-item>
+
+        <span *ngIf="!donorRegisterForm.get('weight').valid && donorRegisterForm.get('weight').touched" class="error_msg">This field is required.</span>
+
+        <ion-item class="form-group">
+          <ion-input type="tel" formControlName="contactnumber" placeholder="Contact number" (ionChange)="onContactNumberChange($event)"
+            class="form-control"></ion-input>
+        </ion-item>
+
+        <div class="alert alert-danger alretBox" role="alert" *ngIf="isNumber">
+          {{numberError}}
+        </div>
+
+        <span *ngIf="!donorRegisterForm.get('contactnumber').valid && donorRegisterForm.get('contactnumber').touched" class="error_msg">Please enter at least 10 numbers.</span>
+
+        <ion-item class="form-group">
+          <ion-input type="text" formControlName="email" placeholder="E-mail" class="form-control"></ion-input>
+        </ion-item>
+
+        <span *ngIf="!donorRegisterForm.get('email').valid && donorRegisterForm.get('email').touched" class="error_msg">This field is required.</span>
+
+        <ion-item class="form-group">
+          <ion-input type="text" formControlName="state" placeholder="State" class="form-control"></ion-input>
+        </ion-item>
+
+        <span *ngIf="!donorRegisterForm.get('state').valid && donorRegisterForm.get('state').touched" class="error_msg">This field is required.</span>
+
+        <ion-item class="form-group">
+          <ion-input type="text" formControlName="city" placeholder="City" class="form-control"></ion-input>
+        </ion-item>
+
+        <span *ngIf="!donorRegisterForm.get('city').valid && donorRegisterForm.get('city').touched" class="error_msg">This field is required.</span>
+
+        <ion-item class="form-group">
+          <ion-label>Country</ion-label>
+          <ion-select id="country" formControlName="country" (ionChange)="onCountryChange()" class="form-control">
+            <ion-option *ngFor="let country of countries" [value]="country">{{country}}</ion-option>
+          </ion-select>
+        </ion-item>
+
+        <span *ngIf="!donorRegisterForm.get('country').valid && donorRegisterForm.get('country').touched" class="error_msg">This field is required.</span>
+
+        <!-- <ion-item class="form-group"> -->
+        <!-- <input type="file" id="userfile"  (change)="onFileChange($event)" #fileInput> Browse   
+                      -->
+        <img src="{{pathForImage(lastImage)}}" style="width: 100%" [hidden]="lastImage === null">
+        <h3 [hidden]="lastImage !== null">Image Preview</h3>
+        <ion-buttons>
+          <button ion-button icon-left (click)="presentActionSheet()">
+            <ion-icon name="camera"></ion-icon>Select Image
+          </button>
+          <button ion-button icon-left (click)="uploadImage()" [disabled]="lastImage === null">
+            <ion-icon name="cloud-upload"></ion-icon>Upload
+          </button>
+        </ion-buttons>
+        <!-- </ion-item> -->
+
+        <h3>Add 3 Contacts
+          <span>(This is an Important contacts for send a emergency messages)</span>
+        </h3>
+        <ion-item class="form-group">
+          <ion-input type="text" formControlName="phoneno1" placeholder="Phone number1"></ion-input>
+        </ion-item>
+
+        <span *ngIf="!donorRegisterForm.get('phoneno1').valid && donorRegisterForm.get('phoneno1').touched" class="error_msg">This field is required.</span>
+
+        <ion-item class="form-group">
+          <ion-input type="text" formControlName="phoneno2" placeholder="Phone number2"></ion-input>
+        </ion-item>
+
+        <span *ngIf="!donorRegisterForm.get('phoneno2').valid && donorRegisterForm.get('phoneno2').touched" class="error_msg">This field is required.</span>
+
+        <ion-item class="form-group">
+          <ion-input type="text" formControlName="phoneno3" placeholder="Phone number3"></ion-input>
+        </ion-item>
+
+        <span *ngIf="!donorRegisterForm.get('phoneno3').valid && donorRegisterForm.get('phoneno3').touched" class="error_msg">This field is required.</span>
+
+        <ion-item class="form-group">
+          <ion-textarea formControlName="message" placeholder="Message"></ion-textarea>
+        </ion-item>
+
+        <span *ngIf="!donorRegisterForm.get('message').valid && donorRegisterForm.get('message').touched" class="error_msg">This field is required.</span>
+
+        <h3>
+          <span>(This message is send to your above contacts for emergency)</span>
+        </h3>
+        <ion-item class="red_btn">
+          <button class="submit_btn" [disabled]="!donorRegisterForm.valid" type="submit">Submit</button>
+        </ion-item>
+      </ion-list>
+    </form>
+  </div>
 </ion-content>

@@ -1,14 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { ServerService } from '../../app/server.service';
 import { DonorlistPage } from '../donorlist/donorlist';
-
-/**
- * Generated class for the DonordetailPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { OfflinePage } from '../offline/offline';
+import { Network } from '@ionic-native/network';
 
 @Component({
   selector: 'page-donordetail',
@@ -21,7 +16,8 @@ export class DonordetailPage implements OnInit{
   donorDetailInfo: any[];
   IMG_URL :String;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private serverService: ServerService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private serverService: ServerService, 
+    public loadingCtrl: LoadingController, private network: Network) {
     // this.selectedItem = navParams.get('item');
     this.donorId = navParams.get('donorId');
     this.IMG_URL = 'https://blooddonorspot.com/images/';
@@ -29,7 +25,13 @@ export class DonordetailPage implements OnInit{
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad DonordetailPage');
+    this.network.onDisconnect().subscribe(data => {
+      console.log("Network Status"+data.type);
+      if(data.type == "offline"){
+        console.log("offline page");
+        this.navCtrl.push(OfflinePage);
+      }
+    }, error => console.error(error));
   }
 
   ngOnInit() {
@@ -37,16 +39,24 @@ export class DonordetailPage implements OnInit{
   }
 
   getDonorDetail() {
+    let loader = this.loadingCtrl.create({
+      content: 'Please wait ...',
+    });
+    loader.present().then(() => {
     this.serverService.getDonorDetailById(this.donorId)
       .subscribe(
         data => {
+          loader.dismiss();
           this.donorDetailInfo = data;
           console.log("title::" + this.donorDetailInfo[0].Age);
         },
         error => {
+          loader.dismiss();
           console.error("There is some error to get the data");
+          this.navCtrl.push(OfflinePage); 
         }
       );
+    });
   }
 
   goBack(){

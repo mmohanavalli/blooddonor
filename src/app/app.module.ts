@@ -13,7 +13,6 @@ import { LatestpostPage } from '../pages/latestpost/latestpost';
 import { SplashPage } from '../pages/splash/splash';
 import { NearesthospitalsPage } from '../pages/nearesthospitals/nearesthospitals';
 import { NearestbloodbanksPage } from '../pages/nearestbloodbanks/nearestbloodbanks';
-import { LauncherPage } from '../pages/launcher/launcher';
 import { LatesteventdetailPage } from '../pages/latesteventdetail/latesteventdetail';
 import { DonorlistPage } from '../pages/donorlist/donorlist';
 import { DonordetailPage } from '../pages/donordetail/donordetail';
@@ -22,7 +21,7 @@ import { BloodrequestPage } from '../pages/bloodrequest/bloodrequest';
 import { ServerService } from './server.service';
 import { SeekeeregisterPage } from '../pages/seekerregister/seekerregister';
 import { FormsModule } from '@angular/forms';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 import { Camera } from '@ionic-native/camera';
 import { ConnectivityProvider } from '../providers/connectivity/connectivity';
@@ -30,6 +29,14 @@ import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
 import { LocationsProvider } from '../providers/locations/locations';
 import { Network } from '@ionic-native/network';
 import { Geolocation } from '@ionic-native/geolocation';
+import { DatePipe } from '@angular/common';
+import { Transfer } from '@ionic-native/transfer';
+import { FilePath } from '@ionic-native/file-path';
+import { OfflinePage } from '../pages/offline/offline';
+import { LoginPage } from '../pages/login/login';
+import { MyDatePickerModule } from 'mydatepicker';
+import { PanicPage } from '../pages/panic/panic';
+
 
 @NgModule({
   declarations: [
@@ -40,18 +47,21 @@ import { Geolocation } from '@ionic-native/geolocation';
     SplashPage,
     NearesthospitalsPage,
     NearestbloodbanksPage,
-    LauncherPage,
     LatesteventdetailPage,
     DonorlistPage,
     DonordetailPage,
     SeekeeregisterPage,
     DonorregisterPage,
-    BloodrequestPage
+    BloodrequestPage,
+    OfflinePage,
+    LoginPage,
+    PanicPage
   ],
   imports: [
     BrowserModule,
     HttpModule,
     FormsModule,
+    MyDatePickerModule,
     IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],
@@ -63,13 +73,15 @@ import { Geolocation } from '@ionic-native/geolocation';
     LatestpostPage,
     NearesthospitalsPage,
     NearestbloodbanksPage,
-    LauncherPage,
     LatesteventdetailPage,
     DonorlistPage,
     DonordetailPage,
     DonorregisterPage,
     SeekeeregisterPage,
-    BloodrequestPage
+    BloodrequestPage,
+    OfflinePage,
+    LoginPage,
+    PanicPage
   ],
   providers: [
     StatusBar,
@@ -79,13 +91,15 @@ import { Geolocation } from '@ionic-native/geolocation';
     FileTransferObject,
     File,
     Camera,
+    Transfer,
+    FilePath,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ConnectivityProvider,
     GoogleMapsProvider,
     ConnectivityProvider,
     LocationsProvider,
     Network,
-    Geolocation
+    Geolocation,
+    DatePipe
   ]
 })
 export class AppModule {}

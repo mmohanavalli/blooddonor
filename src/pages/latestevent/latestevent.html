@@ -9,7 +9,7 @@
     <ion-title>Latest Events</ion-title>
     </div>
     <div class="header_right">
-      <a href="#" class="back_btn">Back</a>
+      <a href="#" class="back_btn" (click)="goback()">Back</a>
     </div>
   </ion-navbar>
 </ion-header>
@@ -20,24 +20,12 @@
       <div class="date_event">
         <h2>{{convertDate(event.Event_Date)}}</h2>
         <p>{{convertMonth(event.month)}} {{event.year}}</p>
-        <!-- <p>{{convertMonth(event.Event_Date) | date : "MMM"}} {{convertYear(event.Event_Date)}}</p> -->
       </div>
       <div class="event_cont">
         <h2><a href="#" innerHTML="{{event.Description}}"></a></h2>
         <p innerHTML="{{event.des}}"></p>
         <p class="event_city">{{ event.City }}</p>
       </div>
-    </div>
-    <!-- <div class="lastest_event_grid">
-      <div class="date_event">
-        <h2>03</h2>
-        <p>Mar 2018</p>
-      </div>
-      <div class="event_cont">
-        <h2><a href="#">Excepteur sint occaecat cupidatat</a></h2>
-        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
-        <p class="event_city">Banglore</p>
-      </div>
-    </div> -->
+    </div>   
  </div>
 </ion-content>

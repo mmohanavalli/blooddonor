@@ -1,8 +1,11 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { register } from "../register_model";
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ServerService } from '../../app/server.service';
+import { HomePage } from '../home/home';
+import { Network } from '@ionic-native/network';
+import { OfflinePage } from '../offline/offline';
 
 
 @Component({
@@ -17,9 +20,11 @@ export class BloodrequestPage {
   public seekerRegister: register[];
   bloodGroups = ['A+', 'B+', 'AB+','O+', 'A-', 'B-', 'AB-', 'O-'];
   countries = ['India', 'Netherland'];
+  errorData : string;
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public navParams: NavParams, private serverService: ServerService, 
-    private _cdr: ChangeDetectorRef, fb: FormBuilder) {      
+  constructor(public navCtrl: NavController, public navParams: NavParams, private serverService: ServerService, 
+    private _cdr: ChangeDetectorRef, fb: FormBuilder,public loadingCtrl: LoadingController, private toastCtrl: ToastController,
+    private network: Network) {      
     this.selectedItem = navParams.get('item');
     this.bloodRequestForm = fb.group({
       bloodgroup: [''],
@@ -28,9 +33,19 @@ export class BloodrequestPage {
   }  
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad Blood request page');
-  } 
+    this.network.onDisconnect().subscribe(data => {
+      console.log("Network Status"+data.type);
+      if(data.type == "offline"){
+        console.log("offline page");
+        this.navCtrl.push(OfflinePage);
+      }
+    }, error => console.error(error));
+  }
 
+  goback() {
+    this.navCtrl.setRoot(HomePage);
+  }
+  
   ngOnInit() {
     this.bloodRequestForm = new FormGroup({
       'bloodRequestData': new FormGroup({
@@ -50,58 +65,65 @@ export class BloodrequestPage {
 
   onBloodGroupChange(): void {
     console.log("bloodgroup ::" + this.bloodRequestForm.value.bloodRequestData.bloodgroup);
-    let bloodgroup = this.bloodRequestForm.value.bloodRequestData.bloodgroup;   
+  //  let bloodgroup = this.bloodRequestForm.value.bloodRequestData.bloodgroup;   
     this._cdr.detectChanges();
   }
 
   onCountryChange(): void {
-    let bloodgroup = this.bloodRequestForm.value.bloodRequestData.country;
+  //  let bloodgroup = this.bloodRequestForm.value.bloodRequestData.country;
     this._cdr.detectChanges();
+  } 
+
+  successToast() {
+    let toast = this.toastCtrl.create({
+      message: 'Your request is added successfully',
+      duration: 6000,
+      position: 'middle'
+    });
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+    toast.present();
   }
 
-  successAlert() {
-    let alert = this.alertCtrl.create({
-      title: 'Blood Request',
-      subTitle: 'Your request is added successfully',
-      buttons: ['ok']
+  FailureToast(errorData) {
+    let toast = this.toastCtrl.create({
+      message: errorData,
+      duration: 6000,
+      position: 'middle'
     });
-    alert.present();
-  }
-
-  failureAlert() {
-    let alert = this.alertCtrl.create({
-      title: 'Blood Request',
-      subTitle: 'error',
-      buttons: ['ok']
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
     });
-    alert.present();
-  }
+    toast.present();
+  }  
   
 
   addBloodRequest() {
     console.log(this.bloodRequestForm);
     console.log("Country ::" + this.bloodRequestForm.value.bloodRequestData.country);
+    let loader = this.loadingCtrl.create({
+      content: 'Please wait ...',
+    });
+    loader.present().then(() => {
     this.serverService.bloodRequestService(this.bloodRequestForm.value)
       .subscribe(
         data => {
-          console.log(data.status);
+          loader.dismiss();
           if (data.status === 1) {
-            console.log(data.status);
-            setTimeout(() => {
-             this.successAlert();
-            }, 5000);
+            this.successToast();
           } else {
-            this.failureAlert()
-            setTimeout(() => {
-              this.failureAlert();                 
-            }, 5000);
+            this.errorData = "Please fill the all information correctly";            
+            this.FailureToast(this.errorData);        
           }
 
         },
         error => {
-          console.log(error);
+          loader.dismiss();
+          this.navCtrl.push(OfflinePage);
         }
       );
+    });
   }
 
 }

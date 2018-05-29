@@ -4,6 +4,7 @@ import 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
 import { events } from "../pages/events_model";
 
+
 @Injectable()
 export class ServerService {
     public file: File;
@@ -16,9 +17,41 @@ export class ServerService {
     constructor(private http: Http) { }
 
 
-    
+    //Login API
 
-/**Home Page RecentDonorsAndSeekersList */
+    checkLogin(userLoginData) {
+        let loginData = new URLSearchParams();
+
+        loginData.set('username', userLoginData.username);
+        loginData.set('password', userLoginData.password);
+        loginData.set('type', userLoginData.type);
+
+       
+
+        return this.http.post(this.baseURL + '/login',
+            loginData.toString(),
+            { headers: this.headersForm })
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    sendPanicMessage(panicData) {
+        let panicDatas = new URLSearchParams();
+
+        panicDatas.set('panic', '1');
+        panicDatas.set('msg', panicData.msg);
+        panicDatas.set('sub', panicData.sub);
+        
+
+        return this.http.post(this.baseURL + '/panic',
+        panicDatas.toString(),
+            { headers: this.headersForm })
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+
+    /**Home Page RecentDonorsAndSeekersList */
 
     getRecentDonorsService(): Observable<events[]> {
         return this.http.get(this.baseURL)
@@ -45,9 +78,17 @@ export class ServerService {
         return this.http.get(this.baseURL + '/latestevent?id=' + eventId)
             .map(this.extractDoctorObjectData)
             .catch(this.handleError);
+    }
 
-    } 
-     /** Donor list */
+    /** Latest Post API */
+
+    getLatestPostList(): Observable<events[]> {
+        return this.http.get(this.baseURL + '/latestpost')
+            .map(this.extractDoctorObjectData)
+            .catch(this.handleError);
+
+    }
+    /** Donor list */
     getDonorList(): Observable<events[]> {
         return this.http.get(this.baseURL + '/donorlist')
             .map(this.extractDoctorObjectData)
@@ -56,45 +97,45 @@ export class ServerService {
 
     /** Find Donors */
     getFindDonor(findDonorData, bloodGroup): Observable<events[]> {
-        if(findDonorData.findDonorData.country == undefined){
+        if (findDonorData.findDonorData.country == undefined) {
             findDonorData.findDonorData.country = "";
             console.log("true");
         }
-        if (findDonorData.findDonorData.city == undefined){
+        if (findDonorData.findDonorData.city == undefined) {
             findDonorData.findDonorData.city = "";
         }
-        if (bloodGroup == undefined){
+        if (bloodGroup == undefined) {
             bloodGroup = "";
         }
-        console.log(this.baseURL + '/finddonors?bloodgroup='+bloodGroup+'&country='+findDonorData.findDonorData.country+'&city='+findDonorData.findDonorData.city);
-        return this.http.get(this.baseURL + '/finddonors?bloodgroup='+bloodGroup+'&country='+findDonorData.findDonorData.country+'&city='+findDonorData.findDonorData.city)
+        console.log(this.baseURL + '/finddonors?bloodgroup=' + bloodGroup + '&country=' + findDonorData.findDonorData.country + '&city=' + findDonorData.findDonorData.city);
+        return this.http.get(this.baseURL + '/finddonors?bloodgroup=' + bloodGroup + '&country=' + findDonorData.findDonorData.country + '&city=' + findDonorData.findDonorData.city)
             .map(this.extractDoctorObjectData)
             .catch(this.handleError);
     }
 
-     /** Donor list By Id API */
+    /** Donor list By Id API */
 
     getDonorDetailById(donorId: string): Observable<events[]> {
         return this.http.get(this.baseURL + '/donorlist?id=' + donorId)
             .map(this.extractDoctorObjectData)
             .catch(this.handleError);
 
-    } 
+    }
 
     /**Register Seeker */
 
     registerSeekerService(seekerRegisterData) {
         let seekerData = new URLSearchParams();
 
-        seekerData.set('name', seekerRegisterData.name);
-        seekerData.set('username', seekerRegisterData.name);
-        seekerData.set('password', seekerRegisterData.name);
-        seekerData.set('state', seekerRegisterData.name);
-        seekerData.set('city', seekerRegisterData.name);
-        seekerData.set('contactnumber', seekerRegisterData.name);
-        seekerData.set('email', seekerRegisterData.name);
-        seekerData.set('country', seekerRegisterData.name);
-        
+        seekerData.set('name', seekerRegisterData.seekerData.name);
+        seekerData.set('username', seekerRegisterData.seekerData.username);
+        seekerData.set('password', seekerRegisterData.seekerData.password);
+        seekerData.set('state', seekerRegisterData.seekerData.state);
+        seekerData.set('city', seekerRegisterData.seekerData.city);
+        seekerData.set('contactnumber', seekerRegisterData.seekerData.contactnumber);
+        seekerData.set('email', seekerRegisterData.seekerData.email);
+        seekerData.set('country', seekerRegisterData.seekerData.country);
+
         return this.http.post(this.baseURL + '/seeker_register',
             seekerData.toString(),
             { headers: this.headersForm })
@@ -102,73 +143,71 @@ export class ServerService {
             .catch(this.handleError);
     }
 
-     /**Register Donor */
+    /**Register Donor */
 
-     postFile(inputValue: any) {
+    registerDonorService(donorRegisterData, imageName) {
+        let donorData = new URLSearchParams();
 
-        var formData = new FormData();
-     //   formData.append("name", "Name");
-        formData.append("file",  inputValue.files[0]);
-    
+        donorData.set('name', donorRegisterData.name);
+        donorData.set('username', donorRegisterData.username);
+        donorData.set('password', donorRegisterData.password);
+        donorData.set('dob', donorRegisterData.dob);
+        donorData.set('age', donorRegisterData.age);
+        donorData.set('gender', donorRegisterData.gender);
+        donorData.set('bloodgroup', donorRegisterData.bloodgroup);
+        donorData.set('weight', donorRegisterData.weight);
+        donorData.set('contactnumber', donorRegisterData.contactnumber);
+        donorData.set('email', donorRegisterData.email);
+        donorData.set('state', donorRegisterData.state);
+        donorData.set('city', donorRegisterData.city);
+        donorData.set('country', donorRegisterData.country);
+        donorData.set('phoneno1', donorRegisterData.phoneno1);
+        donorData.set('phoneno2', donorRegisterData.phoneno2);
+        donorData.set('phoneno3', donorRegisterData.phoneno3);
+        donorData.set('message', donorRegisterData.message);
+        donorData.set('image', imageName);
+
         return this.http.post(this.baseURL + '/donor_register',
-        formData,
-            { headers: this.headersFormData })
+            donorData.toString(),
+            { headers: this.headersForm })
             .map(this.extractData)
             .catch(this.handleError);
     }
 
-     registerDonorService(donorRegisterData , eve) {
-        let seekerData = new URLSearchParams();
-        const reader = new FileReader();        
-             
-        seekerData.set('name', donorRegisterData.name);
-        seekerData.set('username', donorRegisterData.name);
-        seekerData.set('password', donorRegisterData.name);
-        seekerData.set('state', donorRegisterData.name);
-        seekerData.set('city', donorRegisterData.name);
-        seekerData.set('contactnumber', donorRegisterData.name);
-        seekerData.set('email', donorRegisterData.name);
-        seekerData.set('country', donorRegisterData.name);
+    //  registerDonorService(donorRegisterData) {
 
-        var formData = new FormData();
-        formData.append("name", "Name");
-        formData.append("username", "Name");
-        formData.append("password", "Name");
-        formData.append("dob", "Name");
-        formData.append("gender", "Name");
-        formData.append("bloodgroup", "Name");
-        formData.append("weight", "Name");
-        formData.append("contactnumber", "Name");
-        formData.append("email", "Name");
-        formData.append("state", "Name");
-        formData.append("city", "Name"); 
-        formData.append("country", "Name"); 
-        formData.append("phoneno1", "Name"); 
-        formData.append("phoneno2", "Name");  
-        formData.append("phoneno3", "Name");  
-        formData.append("message", "Name");        
-        formData.append("file",  eve.files[0]);        
-        
-        return this.http.post(this.baseURL + '/donor_register',
-        formData,
-            { headers: this.headersFormData })
-            .map(this.extractData)
-            .catch(this.handleError);
-    }
+    //     let formData = new FormData();
 
-    // private readFile(file: any) {
-    //     const reader = new FileReader();
-    //     reader.onloadend = () => {
-    //       const formData = new FormData();
-    //       const imgBlob = new Blob([reader.result], {type: file.type});
-    //       formData.append('file', imgBlob, file.name);
-    //       this.postData(formData);
-    //     };
-    //     reader.readAsArrayBuffer(file);
-    //   }
-      
+    //     formData.append("name", donorRegisterData.name);
+    //     formData.append("username", donorRegisterData.username);
+    //     formData.append("password", donorRegisterData.password);
+    //     formData.append("age", donorRegisterData.dob);
+    //     formData.append("dob", donorRegisterData.age);
+    //     formData.append("gender", donorRegisterData.gender);
+    //     formData.append("bloodgroup", donorRegisterData.bloodgroup);
+    //     formData.append("weight", donorRegisterData.weight);
+    //     formData.append("contactnumber", donorRegisterData.contactnumber);
+    //     formData.append("email", donorRegisterData.email);
+    //     formData.append("state", donorRegisterData.state);
+    //     formData.append("city", donorRegisterData.city); 
+    //     formData.append("country", donorRegisterData.country); 
+    //     formData.append("phoneno1", donorRegisterData.phoneno1); 
+    //     formData.append("phoneno2", donorRegisterData.phoneno2);  
+    //     formData.append("phoneno3", donorRegisterData.phoneno3);  
+    //     formData.append("message", donorRegisterData.message);        
+    //     formData.append("userfile",  donorRegisterData.userfile[0]);  
 
-     /**Blood Request */
+    //    return this.http.post(this.baseURL + '/donor_register',
+    //    formData
+    //         // { headers: undefined}
+    //    )
+    //         .map(this.extractData)
+    //         .catch(this.handleError);
+    // }
+
+
+
+    /**Blood Request */
     bloodRequestService(bloodRequestData) {
         let requestData = new URLSearchParams();
 
@@ -182,15 +221,15 @@ export class ServerService {
         requestData.set('city', bloodRequestData.city);
         requestData.set('country', bloodRequestData.country);
         requestData.set('purpose', bloodRequestData.purpose);
-        
+
         return this.http.post(this.baseURL + '/bloodrequest',
-        requestData.toString(),
+            requestData.toString(),
             { headers: this.headersForm })
             .map(this.extractData)
             .catch(this.handleError);
     }
-   
-   
+
+
     postMessageService(message) {
 
         let userData = JSON.stringify(
@@ -210,34 +249,34 @@ export class ServerService {
 
     private extractData(res: Response) {
         res => res.json()
-        if(res.status === 200 ){
-        let body = res.json();
-        let data = body;
-         return data;  
-    }
-             
+        if (res.status === 200) {
+            let body = res.json();
+            let data = body;
+            return data;
+        }
+
 
         console.log("test  1 " + res.json());
         res => res.json()
         console.log("test  2 " + res);
         return res;
-    }    
+    }
 
     private extractDoctorObjectData(res: Response) {
-        let body = res.json();       
-        return body  ;
+        let body = res.json();
+        return body;
     }
 
     private extractRecentDonorData(res: Response) {
         let body = res.json();
         let donors = body.donors;
-        return donors  ;
+        return donors;
     }
 
     private extractRecentSeekerData(res: Response) {
         let body = res.json();
         let seeker = body.seeker;
-        return seeker  ;
+        return seeker;
     }
 
     private handleError(error: Response | any) {
