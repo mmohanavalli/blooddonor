@@ -9,7 +9,7 @@
       <ion-title>Seeker Register</ion-title>
     </div>
     <div class="header_right">
-      <a href="#" class="back_btn">Back</a>
+      <a href="#" class="back_btn" (click)= "goback()">Back</a>
     </div>
   </ion-navbar>
 </ion-header>
@@ -38,15 +38,15 @@
         </ion-item>
 
         <span *ngIf="!seekerRegisterForm.get('seekerData.password').valid && seekerRegisterForm.get('seekerData.password').touched"
-          class="error_msg">Please fill the password</span>
+          class="error_msg">Please enter at least 5 characters.</span>
 
         <ion-item class="form-group">
           <ion-input type="password" formControlName="confirmPassword" placeholder="Confirm Password" class="form-control"></ion-input>>
         </ion-item>
         <span *ngIf="!seekerRegisterForm.get('seekerData.confirmPassword').valid && seekerRegisterForm.get('seekerData.confirmPassword').touched"
-          class="error_msg">Please fill the confirm password</span>
+          class="error_msg">Please enter at least 5 characters.</span>
 
-        <div class="alert alert-danger alretBox" role="alert" *ngIf="!isPassword">
+        <div class="error_content" role="alert" *ngIf="!isPassword">
             {{passwordError}}
         </div>
         <ion-item class="form-group">
@@ -63,11 +63,13 @@
           class="error_msg">Please fill the city</span>
 
         <ion-item class="form-group">
-          <ion-input type="tel" maxlength=“10” formControlName="contactnumber" (ionChange)="onContactNumberChange($event)" placeholder="Contact number" class="form-control"></ion-input>
+            <ion-input type="tel" maxlength=“10” formControlName="contactnumber" placeholder="Contact number" class="form-control"></ion-input>
         </ion-item>
-        <div class="alert alert-danger alretBox" role="alert" *ngIf="isNumber">
+          <!-- <ion-input type="tel" maxlength=“10” formControlName="contactnumber" (ionChange)="onContactNumberChange($event)" placeholder="Contact number" class="form-control"></ion-input>
+        </ion-item> -->
+        <!-- <div class="alert alert-danger alretBox error_msg" role="alert" *ngIf="isNumber">
             {{numberError}}
-        </div>
+        </div> -->
         <span *ngIf="!seekerRegisterForm.get('seekerData.contactnumber').valid && seekerRegisterForm.get('seekerData.contactnumber').touched"
           class="error_msg">Please enter at least 10 numbers.</span>
 
@@ -78,10 +80,11 @@
           class="error_msg">Please fill the email</span>
 
         <ion-item class="form-group">
-          <ion-label>Country</ion-label>
+          <!-- <ion-label>Country</ion-label>
           <ion-select id="country" formControlName="country" (ionChange)="onCountryChange()" class="form-control">
             <ion-option *ngFor="let country of countries" [value]="country">{{country}}</ion-option>
-          </ion-select>
+          </ion-select> -->
+          <ion-input type="text"  formControlName="country"  value="India" placeholder="Country" class="form-control"  [readonly]="!editable"></ion-input>
         </ion-item>
         <span *ngIf="!seekerRegisterForm.get('seekerData.country').valid && seekerRegisterForm.get('seekerData.country').touched"
           class="error_msg">Please select the country</span>

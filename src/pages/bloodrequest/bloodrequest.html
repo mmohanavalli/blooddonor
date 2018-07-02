@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar >
+  <ion-navbar>
     <div class="header_left">
       <button ion-button menuToggle>
         <ion-icon name="menu"></ion-icon>
@@ -20,40 +20,52 @@
       <ion-list formGroupName="bloodRequestData">
         <ion-item class="form-group">
           <ion-input type="text" id="name" formControlName="name" placeholder="Name" class="form-control"></ion-input>
-
         </ion-item>
+
         <span *ngIf="!bloodRequestForm.get('bloodRequestData.name').valid && bloodRequestForm.get('bloodRequestData.name').touched"
           class="error_msg">Please fill the Name</span>
-        <ion-item>
 
+        <ion-item>
           <ion-input type="text" id="age" formControlName="age" placeholder="Age" class="form-control"></ion-input>
         </ion-item>
+
         <span *ngIf="!bloodRequestForm.get('bloodRequestData.age').valid && bloodRequestForm.get('bloodRequestData.age').touched"
           class="error_msg">This field is required.</span>
+
         <ion-item>
           <ion-label>Blood group</ion-label>
           <ion-select id="blooggroup" formControlName="bloodgroup" (ionChange)="onBloodGroupChange()" class="form-control">
             <ion-option *ngFor="let bloodgroup of bloodGroups" [value]="bloodgroup">{{bloodgroup}}</ion-option>
           </ion-select>
         </ion-item>
+
         <span *ngIf="!bloodRequestForm.get('bloodRequestData.bloodgroup').valid && bloodRequestForm.get('bloodRequestData.bloodgroup').touched"
           class="error_msg">This field is required.</span>
-        <ion-item>
-          <ion-label>When you need blood</ion-label>
-          <ion-datetime id="date" formControlName="date" displayFormat="MM/DD/YYYY" class="form-control"></ion-datetime>
-        </ion-item>
+
+        <div  class="regis_calender">
+          <!-- <ion-datetime id="date" formControlName="date" displayFormat="MM/DD/YYYY" class="form-control"></ion-datetime> -->
+          <my-date-picker name="mydate" [options]="myDatePickerOptions" placeholder= "When you need blood" formControlName="date"></my-date-picker>
+        </div>
+
         <span *ngIf="!bloodRequestForm.get('bloodRequestData.date').valid && bloodRequestForm.get('bloodRequestData.date').touched"
           class="error_msg">This field is required.</span>
+
         <ion-item>
           <ion-input id="units" formControlName="units" type="text" placeholder="Units(blood)" class="form-control"></ion-input>
         </ion-item>
+
         <span *ngIf="!bloodRequestForm.get('bloodRequestData.units').valid && bloodRequestForm.get('bloodRequestData.units').touched"
           class="error_msg">This field is required.</span>
+
         <ion-item>
-          <ion-input id="contactnumber" formControlName="contactnumber" type="tel" placeholder="Contact number" class="form-control"></ion-input>
+          <ion-input id="contactnumber" maxlength=“10” formControlName="contactnumber" type="tel" placeholder="Contact number" class="form-control"></ion-input>
         </ion-item>
+
         <span *ngIf="!bloodRequestForm.get('bloodRequestData.contactnumber').valid && bloodRequestForm.get('bloodRequestData.contactnumber').touched"
-          class="error_msg">This field is required.</span>
+          class="error_msg">Please enter at least 10 numbers.</span>
+
+        <!-- <span *ngIf="!bloodRequestForm.get('bloodRequestData.contactnumber').valid && bloodRequestForm.get('bloodRequestData.contactnumber').touched"
+          class="error_msg">This field is required.</span> -->
 
         <ion-item>
           <ion-input id="state" formControlName="state" type="text" placeholder="State" class="form-control"></ion-input>
@@ -68,24 +80,29 @@
           class="error_msg">This field is required.</span>
 
         <ion-item>
-          <ion-label>Country</ion-label>
+          <!-- <ion-label>Country</ion-label>
           <ion-select id="country" formControlName="country" (ionChange)="onCountryChange()" class="form-control">
             <ion-option *ngFor="let country of countries" [value]="country">{{country}}</ion-option>
-          </ion-select>
+          </ion-select> -->
+            <ion-input type="text"  formControlName="country"  placeholder="Country" class="form-control"  [readonly]="!editable"></ion-input>
         </ion-item>
+
         <span *ngIf="!bloodRequestForm.get('bloodRequestData.country').valid && bloodRequestForm.get('bloodRequestData.country').touched"
           class="error_msg">This field is required.</span>
 
         <ion-item>
           <ion-textarea id="purpose" formControlName="purpose" placeholder="Purpose/Details" class="form-control"></ion-textarea>
         </ion-item>
+
         <span *ngIf="!bloodRequestForm.get('bloodRequestData.purpose').valid && bloodRequestForm.get('bloodRequestData.purpose').touched"
           class="error_msg">This field is required.</span>
 
         <ion-item class="red_btn">
           <button class="submit_btn" [disabled]="!bloodRequestForm.valid" type="submit">Submit</button>
         </ion-item>
+        
       </ion-list>
+
     </form>
   </div>
 </ion-content>

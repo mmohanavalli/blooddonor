@@ -5,6 +5,7 @@ import { register } from "../register_model";
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Network } from '@ionic-native/network';
 import { OfflinePage } from '../offline/offline';
+import { HomePage } from '../home/home';
 
 @Component({
   selector: 'page-seekerregister',
@@ -48,8 +49,8 @@ export class SeekeeregisterPage {
       'seekerData': new FormGroup({
         'name': new FormControl(null, [Validators.required]),
         'username': new FormControl(null, [Validators.required]),
-        'password': new FormControl(null, [Validators.required]),
-        'confirmPassword': new FormControl(null, [Validators.required]),
+        'password': new FormControl(null, [Validators.required, Validators.minLength(5),Validators.maxLength(5)]),
+        'confirmPassword': new FormControl(null, [Validators.required, Validators.minLength(5),Validators.maxLength(5)]),
         'state': new FormControl(null, [Validators.required]),
         'city': new FormControl(null, [Validators.required]),
         'contactnumber': new FormControl(null, [Validators.required, Validators.minLength(10),Validators.maxLength(10)]),
@@ -59,6 +60,9 @@ export class SeekeeregisterPage {
     });
   }
 
+  goback() {
+    this.navCtrl.setRoot(HomePage);
+  }
 
   onCountryChange(): void {
   //  let country = this.seekerRegisterForm.value.seekerData.country;
@@ -70,7 +74,10 @@ export class SeekeeregisterPage {
 
     if (!regExp.test(event.value)) {
       this.isNumber = true;
-      this.numberError ="Please enter number only";    
+      this.numberError ="Please enter number only"; 
+      setTimeout(() => {
+        this.numberError ="";    
+      }, 4000);      
     }else{
       this.isNumber = false;
     }    
@@ -79,7 +86,8 @@ export class SeekeeregisterPage {
   successToast() {
     let toast = this.toastCtrl.create({
       message: 'User added successfully',
-      duration: 6000,
+      duration: 3000,
+      cssClass: 'loginsuccess',
       position: 'middle'
     });
     toast.onDidDismiss(() => {
@@ -91,7 +99,8 @@ export class SeekeeregisterPage {
   FailureToast(errorData) {
     let toast = this.toastCtrl.create({
       message: errorData,
-      duration: 6000,
+      duration: 3000,
+      cssClass: 'loginfailed',
       position: 'middle'
     });
     toast.onDidDismiss(() => {
@@ -109,6 +118,9 @@ export class SeekeeregisterPage {
     } else {
       this.isPassword = false;
       this.passwordError = "Password not Match";
+      setTimeout(() => {
+        this.passwordError = "";
+      }, 4000);      
     }
     if(this.isPassword){
       let loader = this.loadingCtrl.create({
@@ -121,6 +133,7 @@ export class SeekeeregisterPage {
           loader.dismiss();
           if (data.status === 1) {
             this.successToast();
+            this.seekerRegisterForm.reset();
           } else if (data.status === "username invalid") {
             let errorData = "Username is exist";            
             this.FailureToast(errorData);                 
