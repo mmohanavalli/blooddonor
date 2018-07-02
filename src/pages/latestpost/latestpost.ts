@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, ModalController } from 'ionic-angular';
 import { ServerService } from '../../app/server.service';
 import { HomePage } from '../home/home';
 import { OfflinePage } from '../offline/offline';
 import { Network } from '@ionic-native/network';
+import { SeekerdetailPage } from '../seekerdetail/seekerdetail';
+import { LoginPage } from '../login/login';
 
 /**
  * Generated class for the LatestpostPage page.
@@ -21,9 +23,12 @@ export class LatestpostPage {
   selectedItem: any;
   postList: any[];
   imagePath : any;
+  userLogin: boolean;
+  loginStatus: any;
+  pageName: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private serverService: ServerService,
-    public loadingCtrl: LoadingController, private network: Network) {
+    public loadingCtrl: LoadingController, private network: Network, public modalCtrl: ModalController) {
     this.selectedItem = navParams.get('item');
   }
  
@@ -42,6 +47,19 @@ export class LatestpostPage {
     return newDate;
   }
 
+  ionViewWillEnter() {
+    this.userLogin = false;
+    this.pageName = "seekerlist";
+    this.loginStatus = sessionStorage.getItem('loginstatus');
+    console.log(" loginStatus " + this.loginStatus);
+    if (this.loginStatus != 'true') {
+      // this.addLogin();
+      this.userLogin = false;
+    } else {
+      this.userLogin = true;
+    }  
+  }
+
   ionViewDidLoad() {
     this.network.onDisconnect().subscribe(data => {
       console.log("Network Status"+data.type);
@@ -50,6 +68,15 @@ export class LatestpostPage {
         this.navCtrl.push(OfflinePage);
       }
     }, error => console.error(error));
+  }
+
+  addLogin() {
+    let addWeatherModal = this.modalCtrl.create(LoginPage, { name: this.pageName });
+    addWeatherModal.onDidDismiss(data => {      
+      this.ionViewWillEnter();
+    });
+    addWeatherModal.present();
+
   }
 
   getLatestPost() {
@@ -62,7 +89,6 @@ export class LatestpostPage {
         data => {
           loader.dismiss();
           this.postList = data;
-          // console.log("title::" + this.donorList[0].Title);
         },
         error => {
           loader.dismiss();
@@ -91,8 +117,12 @@ export class LatestpostPage {
     }else if(bloodGroup == "O+"){
       this.imagePath = 'assets/imgs/o+.png';
     }
-
     return this.imagePath;
+  }
 
+  gotoSeekerDetailPage(seekerId){
+    this.navCtrl.push(SeekerdetailPage, {
+        seekerId: seekerId
+      });
   }
 }

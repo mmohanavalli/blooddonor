@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
@@ -18,30 +18,40 @@ import { SeekeeregisterPage } from '../pages/seekerregister/seekerregister';
 
 })
 export class MyApp {
-  
+
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = HomePage;
+  loginInfo: any;
+  activePage: any;
+  userInfo: any;
 
-  pages: Array<{title: string, component: any}>;
+  pagesOne: Array<{ title: string, component: any }>;
+  isSeeker: Array<{ title: string, component: any }>;
+  isDonor: Array<{ title: string, component: any }>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, public statusBar: StatusBar,
+    public splashScreen: SplashScreen, private menu: MenuController) {
+    //  this.menu.enable(true);
+
+    this.ionViewWillEnter();
     this.initializeApp();
-    platform.ready().then(() => { 
-      statusBar.styleDefault();
-    //  let splash = popctrl.create(SplashPage);
-    //  splash.present();
-    splashScreen.hide();
 
-  });
 
-  
-    // used for an example of ngFor and navigation
-    this.pages = [
+    this.pagesOne = [
       { title: 'HOME', component: HomePage },
       { title: 'FIND A DONOR', component: DonorlistPage },
       { title: 'REGISTER AS DONOR', component: DonorregisterPage },
       { title: 'REGISTER AS SEEKER', component: SeekeeregisterPage },
+      { title: 'LATEST POST', component: LatestpostPage },
+      { title: 'LATEST EVENT', component: LatestEventPage },
+      { title: 'NEAR BY BLOOD BANKS', component: NearestbloodbanksPage },
+      { title: 'NEAR BY HOSPITALS', component: NearesthospitalsPage }
+    ];    
+
+    this.isSeeker = [
+      { title: 'HOME', component: HomePage },
+      { title: 'FIND A DONOR', component: DonorlistPage },
       { title: 'BLOOD REQUEST', component: BloodrequestPage },
       { title: 'LATEST POST', component: LatestpostPage },
       { title: 'LATEST EVENT', component: LatestEventPage },
@@ -49,7 +59,46 @@ export class MyApp {
       { title: 'NEAR BY HOSPITALS', component: NearesthospitalsPage }
     ];
 
+    this.isDonor = [
+      { title: 'HOME', component: HomePage },
+      { title: 'FIND A DONOR', component: DonorlistPage },
+      { title: 'LATEST POST', component: LatestpostPage },
+      { title: 'LATEST EVENT', component: LatestEventPage },
+      { title: 'NEAR BY BLOOD BANKS', component: NearestbloodbanksPage },
+      { title: 'NEAR BY HOSPITALS', component: NearesthospitalsPage }
+    ];
+
   }
+
+  ionViewWillEnter() {
+
+    this.loginInfo = sessionStorage.getItem('loginstatus')
+    this.userInfo = sessionStorage.getItem('userinfo')
+    this.menu.enable(true, 'pageB');
+    if (this.loginInfo == 'true') {
+      if(this.userInfo == "Seeker"){
+        this.menu.enable(true, 'isSeeker');
+        this.menu.enable(false, 'pageA');
+        this.menu.enable(false, 'isDonor');
+      }else{
+        this.menu.enable(true, 'isDonor');
+        this.menu.enable(false, 'isSeeker');
+        this.menu.enable(false, 'pageA');        
+      }
+     
+    } else if (this.loginInfo == null) {
+      this.menu.enable(true, 'pageA');
+      this.menu.enable(false, 'isDonor');
+      this.menu.enable(false, 'isSeeker');
+    }
+
+
+  }
+
+  //   ionViewWillLeave() {
+  //     this.menu.enable(true);
+  //     console.log("menu true")
+  //   }
 
   initializeApp() {
     this.platform.ready().then(() => {
@@ -64,7 +113,6 @@ export class MyApp {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
-    
+    this.activePage = page;
   }
-  
 }

@@ -1,22 +1,23 @@
 <ion-header>
-    <ion-navbar hideBackButton="true">
-      <div class="header_left">
-        <button ion-button menuToggle>
-          <ion-icon name="menu"></ion-icon>
-        </button>
-      </div>
-      <div class="header_center"> 
-      <ion-title>Latest Post</ion-title>
-      </div>
-      <div class="header_right">
-        <a href="#" class="back_btn" (click)="goback()">Back</a>
-      </div>
-    </ion-navbar>
-  </ion-header>
-  
-  <ion-content padding>
-  <div class="donors_page">    
-    <div class="donor_list_info" *ngFor="let post of postList" (click)="gotoLatestEventDetailPage(donor.id)">
+  <ion-navbar hideBackButton="true">
+    <div class="header_left">
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </div>
+    <div class="header_center">
+      <ion-title>Seeker's</ion-title>
+    </div>
+    <div class="header_right">
+      <a href="#" class="back_btn" (click)="goback()">Back</a>
+    </div>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="donors_page">
+      <div *ngIf="!userLogin">
+    <div class="donor_list_info" *ngFor="let post of postList" >
       <div class="donor_list_grid one">
         <div class="donor_list_img">
           <div class="hme_blood_name">
@@ -25,21 +26,67 @@
           </div>
         </div>
         <ul>
-        <li>Name : <span>{{ post.Name }}</span></li>
-        <li>Age : <span>{{post.Age}}</span></li>
+          <li>Name :
+            <span>{{ post.Name }}</span>
+          </li>
+          <li>Age :
+            <span>{{post.Age}}</span>
+          </li>
         </ul>
       </div>
       <div class="donor_list_grid two">
-        <ul>   
-        <li>Date : <span>{{ post.Need_Date }}</span></li>
-        <li>City : <span> {{ post.City }}</span></li>
+        <ul>
+          <li>Date :
+            <span>{{ post.Need_Date }}</span>
+          </li>
+          <li>City :
+            <span> {{ post.City }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="donor_list_grid three login_bttn" (click)="addLogin()">
+        <a href="#">
+          <p class="hme_para_cont login_icon">Login</p>
+        </a>
+      </div>
+
+    </div>
+    </div>
+
+    <div *ngIf="userLogin">
+    <div class="donor_list_info" *ngFor="let post of postList" >
+      <div class="donor_list_grid one" (click) = "gotoSeekerDetailPage(post.id)">
+        <div class="donor_list_img">
+          <div class="hme_blood_name">
+            <!-- <h1 class="bplus">{{post.Blood_Group}}</h1> -->
+            <img [src]="getBloodGroupImage(post.Blood_Group)">
+          </div>
+        </div>
+        <ul>
+          <li>Name :
+            <span>{{ post.Name }}</span>
+          </li>
+          <li>Age :
+            <span>{{post.Age}}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="donor_list_grid two">
+        <ul>
+          <li>Date :
+            <span>{{ post.Need_Date }}</span>
+          </li>
+          <li>City :
+            <span> {{ post.City }}</span>
+          </li>
         </ul>
       </div>
       <div class="donor_list_grid three">
-        <p class="hme_para_cont mail">{{ post.Email }}</p>
+        <!-- <p class="hme_para_cont mail">{{ post.Email }}</p> -->
         <p class="hme_para_cont phone">{{ post.Contact_Number }}</p>
-      </div>  
-    </div> 
+      </div>
+    </div>
+    </div>
   </div>
-  </ion-content>
-  
+</ion-content>

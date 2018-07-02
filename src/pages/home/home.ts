@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, IonicPage, LoadingController, AlertController, ToastController, ModalController, ViewController } from 'ionic-angular';
+import { NavController, IonicPage, LoadingController, AlertController, ToastController, ModalController, ViewController, PopoverController } from 'ionic-angular';
 import { DonorlistPage } from '../donorlist/donorlist';
 import { DonorregisterPage } from '../donorregister/donorregister';
 import { ServerService } from '../../app/server.service';
@@ -7,6 +7,10 @@ import { LoginPage } from '../login/login';
 import { Network } from '@ionic-native/network';
 import { OfflinePage } from '../offline/offline';
 import { PanicPage } from '../panic/panic';
+import { PopoverPage } from '../popover/popover';
+import { Events } from 'ionic-angular';
+import { LatestpostPage } from '../latestpost/latestpost';
+
 
 @IonicPage()
 @Component({
@@ -19,27 +23,52 @@ export class HomePage implements OnInit {
   seekerData: any[];
   loginIcon: boolean;
   loginInfo: any;
-
+  userInfo: any
+  showSeekerProfile: boolean;
+  showDonorProfile: boolean;
+  isSeeker: boolean;
+  // isOpen: boolean;
+  // isPopOver: any;
   IMG_URL: String;
+  isLogin: boolean;
+  showRegisterNotLogin: boolean;
+  className : any;
 
   constructor(public navCtrl: NavController, private serverService: ServerService,
     public loadingCtrl: LoadingController, public toastCtrl: ToastController,
-    private alertCtrl: AlertController, public modalCtrl: ModalController, public viewCtrl: ViewController, private network: Network) {
+    private alertCtrl: AlertController, public modalCtrl: ModalController,
+    public popoverCtrl: PopoverController, public viewCtrl: ViewController,
+    public events: Events, private network: Network) {
     this.IMG_URL = 'https://blooddonorspot.com/images/register/thumb_img/';
-    this.loginInfo = sessionStorage.getItem('loginstatus')
-    // if(this.loginInfo == 'true'){
-    //   this.loginIcon = false;
-    // }else{
-    //   this.loginIcon = true;
-    // }
+    this.viewCtrl.dismiss();
+    // this.isOpen = false;
+    // this.isPopOver = true;
+    this.isLogin = true;
+    this.isSeeker = true;
+    this.className = 'hme_grid'
+    this.showRegisterNotLogin = true;    
   }
 
   ionViewWillEnter() {
-    if (this.loginInfo == 'true') {
-      this.loginIcon = false;
-    } else {
-      this.loginIcon = true;
-    }
+    this.loginInfo = sessionStorage.getItem('loginstatus')
+    this.userInfo = sessionStorage.getItem('userinfo')
+    console.log ("loginInfo "+this.loginInfo);
+    if(this.loginInfo == null || this.loginInfo == 'false'){
+      this.isLogin = true;  
+      this.isSeeker = true;      
+      this.className = 'hme_grid'
+      this.showRegisterNotLogin = true;   
+    }else{   
+     this.isLogin = false;
+     if(this.userInfo == 'Seeker'){
+      this.className = 'hme_grid hme_seeker'
+      this.isSeeker = true;
+     }else if(this.userInfo == 'Donor'){
+      this.className = 'hme_grid hme_donor'
+      this.isSeeker = false;
+     }    
+     this.showRegisterNotLogin = false; 
+    } 
   }
 
   ngOnInit() {
@@ -68,13 +97,7 @@ export class HomePage implements OnInit {
     this.network.onConnect().subscribe(data => {
       console.log("Network Status" + data)
     }, error => console.error(error));
-  }
-
-  logout() {
-    sessionStorage.setItem('loginstatus', 'false');
-    this.loginIcon = true;
-    console.log("getItem" + sessionStorage.getItem('loginstatus'));
-  }
+  }  
 
   presentPanic() {
     let alert = this.alertCtrl.create({
@@ -94,7 +117,6 @@ export class HomePage implements OnInit {
           cssClass: 'ok_btn',
           handler: () => {
             console.log('Panic clicked');
-
             let addWeatherModal = this.modalCtrl.create(PanicPage, { showBackdrop: true, enableBackdropDismiss: true });
             addWeatherModal.present();
           }
@@ -129,67 +151,43 @@ export class HomePage implements OnInit {
     toast.present();
   }
 
+  presentPopover(myEvent) {
+    // if (open) {
+    //   this.isPopOver = false;
+    // }
+    let popover = this.popoverCtrl.create(PopoverPage);
+    popover.present({
+      ev: myEvent,    
+    });
+    
+    popover.onDidDismiss(() => {
+      popover.dismiss;
+      // this.isPopOver = true;
+      this.ionViewWillEnter(); 
+      popover = null;
+    });
+  }
 
   addLogin() {
     let loginCtrl = this.modalCtrl.create(LoginPage, { showBackdrop: true, enableBackdropDismiss: true });
     loginCtrl.onDidDismiss(() => {
-      this.ionViewWillEnter();
+      this.ionViewWillEnter();    
     });
     loginCtrl.present();
-  }
-
-  presentLogin() {
-    let alert = this.alertCtrl.create({
-      title: 'User Login',
-      cssClass: 'loginform',
-      inputs: [
-        {
-          name: 'username',
-          placeholder: 'E-mail or Username'
-        },
-        {
-          name: 'password',
-          placeholder: 'Password',
-          type: 'password'
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'closebtn',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Login',
-          cssClass: 'loginebtn',
-          handler: data => {
-            // if (User.isValid(data.username, data.password)) {
-            //   logged in!
-            // } else {
-            //   invalid login
-            //   return false;
-            // }
-            return false;
-          }
-        }
-      ]
-
-
-    });
-    alert.present();
   }
 
   gotoDonorListPage() {
     this.navCtrl.push(DonorlistPage);
   }
 
+  gotoSeekerListPage() {
+    this.navCtrl.push(LatestpostPage);
+  }
+
   gotoDonorRegisterPage() {
     this.navCtrl.push(DonorregisterPage);
   }
-
+  
   convertDate(date) {
     let dateArray = date.split("-");
     let newDate = dateArray[0] + "." + dateArray[1] + "." + dateArray[2];
@@ -203,8 +201,8 @@ export class HomePage implements OnInit {
           this.donorData = data;
         },
         error => {
-          console.error("There is some error to get the data");
-          this.navCtrl.push(OfflinePage);
+          console.error("There is some error to get the data" + error);
+          //  this.navCtrl.push(OfflinePage);
         }
       );
   }
@@ -215,8 +213,8 @@ export class HomePage implements OnInit {
           this.seekerData = data;
         },
         error => {
-          console.error("There is some error to get the data");
-          this.navCtrl.push(OfflinePage);
+          console.error("There is some error to get the data" + error);
+          // this.navCtrl.push(OfflinePage);
         }
       );
   }

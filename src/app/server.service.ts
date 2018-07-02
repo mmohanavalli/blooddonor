@@ -26,7 +26,7 @@ export class ServerService {
         loginData.set('password', userLoginData.password);
         loginData.set('type', userLoginData.type);
 
-       
+
 
         return this.http.post(this.baseURL + '/login',
             loginData.toString(),
@@ -41,15 +41,125 @@ export class ServerService {
         panicDatas.set('panic', '1');
         panicDatas.set('msg', panicData.msg);
         panicDatas.set('sub', panicData.sub);
-        
+
 
         return this.http.post(this.baseURL + '/panic',
-        panicDatas.toString(),
+            panicDatas.toString(),
             { headers: this.headersForm })
             .map(this.extractData)
             .catch(this.handleError);
     }
 
+    sendEmailMessage(emailData) {
+        let mailDatas = new URLSearchParams();
+
+        mailDatas.set('from', emailData.from);
+        mailDatas.set('to', emailData.to);
+        mailDatas.set('msg', emailData.msg);
+        mailDatas.set('sub', emailData.sub);
+
+
+        return this.http.post(this.baseURL + '/sendMail',
+            mailDatas.toString(),
+            { headers: this.headersForm })
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    sendreview(reviewData, seekerID, donorId) {
+        let reviewDatas = new URLSearchParams();
+
+        reviewDatas.set('name', reviewData.name);
+        reviewDatas.set('email', reviewData.email);
+        reviewDatas.set('review', reviewData.review);
+        reviewDatas.set('ratings', reviewData.ratings);
+        reviewDatas.set('seeker_id', seekerID);
+        reviewDatas.set('donor_id', donorId);
+
+
+        return this.http.post(this.baseURL + '/seeker_review',
+            reviewDatas.toString(),
+            { headers: this.headersForm })
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    /** Get Captcha */
+    
+    getCaptcha() {
+        return this.http.get(this.baseURL + '/getcaptcha')
+            .map(this.extractObjectData)
+            .catch(this.handleError);
+    }
+
+    /**Edit Seeker and Donor Profile */
+
+    getSeekerInfo(username) {
+        return this.http.get(this.baseURL + '/seeker_details?username=' + username)
+            .map(this.extractObjectData)
+            .catch(this.handleError);
+    }
+
+    getDonorInfo(username) {
+        return this.http.get(this.baseURL + '/donor_details?username=' + username)
+            .map(this.extractObjectData)
+            .catch(this.handleError);
+    }
+
+    editSeekerProfile(seekerUpdateData, pass) {
+        let seekerData = new URLSearchParams();
+
+        seekerData.set('name', seekerUpdateData.seekerData.name);
+        seekerData.set('username', seekerUpdateData.seekerData.username);
+        seekerData.set('password', pass);
+        seekerData.set('state', seekerUpdateData.seekerData.state);
+        seekerData.set('city', seekerUpdateData.seekerData.city);
+        seekerData.set('contactnumber', seekerUpdateData.seekerData.contactnumber);
+        // seekerData.set('email', seekerUpdateData.seekerData.email);
+        seekerData.set('country', seekerUpdateData.seekerData.country);
+
+        return this.http.post(this.baseURL + '/seeker_edit',
+            seekerData.toString(),
+            { headers: this.headersForm })
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
+
+    editDonorProfile(donorUpdateData, dob, imageName) {
+        let donorData = new URLSearchParams();
+
+        let gender;
+        if (donorUpdateData.gender == 'Female') {
+            gender = 0;
+        } else {
+            gender = 1;
+        }
+
+        donorData.set('name', donorUpdateData.name);
+        donorData.set('username', donorUpdateData.username);
+        donorData.set('password', donorUpdateData.password);
+        donorData.set('dob', dob);
+        donorData.set('age', donorUpdateData.age);
+        donorData.set('gender', gender);
+        donorData.set('bloodgroup', donorUpdateData.bloodgroup);
+        donorData.set('weight', donorUpdateData.weight);
+        donorData.set('contactnumber', donorUpdateData.contactnumber);
+        donorData.set('email', donorUpdateData.email);
+        donorData.set('state', donorUpdateData.state);
+        donorData.set('city', donorUpdateData.city);
+        donorData.set('country', donorUpdateData.country);
+        donorData.set('phoneno1', donorUpdateData.phoneno1);
+        donorData.set('phoneno2', donorUpdateData.phoneno2);
+        donorData.set('phoneno3', donorUpdateData.phoneno3);
+        donorData.set('message', donorUpdateData.message);
+        donorData.set('image', imageName);
+
+        return this.http.post(this.baseURL + '/donor_edit',
+            donorData.toString(),
+            { headers: this.headersForm })
+            .map(this.extractData)
+            .catch(this.handleError);
+    }
 
     /**Home Page RecentDonorsAndSeekersList */
 
@@ -69,14 +179,14 @@ export class ServerService {
 
     getLatestEvents(): Observable<events[]> {
         return this.http.get(this.baseURL + '/latestevent')
-            .map(this.extractDoctorObjectData)
+            .map(this.extractObjectData)
             .catch(this.handleError);
     }
     /** Latest Event By Id API */
 
     getLatestEventsById(eventId: string): Observable<events[]> {
         return this.http.get(this.baseURL + '/latestevent?id=' + eventId)
-            .map(this.extractDoctorObjectData)
+            .map(this.extractObjectData)
             .catch(this.handleError);
     }
 
@@ -84,14 +194,14 @@ export class ServerService {
 
     getLatestPostList(): Observable<events[]> {
         return this.http.get(this.baseURL + '/latestpost')
-            .map(this.extractDoctorObjectData)
+            .map(this.extractObjectData)
             .catch(this.handleError);
 
     }
     /** Donor list */
     getDonorList(): Observable<events[]> {
         return this.http.get(this.baseURL + '/donorlist')
-            .map(this.extractDoctorObjectData)
+            .map(this.extractObjectData)
             .catch(this.handleError);
     }
 
@@ -109,15 +219,24 @@ export class ServerService {
         }
         console.log(this.baseURL + '/finddonors?bloodgroup=' + bloodGroup + '&country=' + findDonorData.findDonorData.country + '&city=' + findDonorData.findDonorData.city);
         return this.http.get(this.baseURL + '/finddonors?bloodgroup=' + bloodGroup + '&country=' + findDonorData.findDonorData.country + '&city=' + findDonorData.findDonorData.city)
-            .map(this.extractDoctorObjectData)
+            .map(this.extractObjectData)
             .catch(this.handleError);
     }
 
     /** Donor list By Id API */
 
-    getDonorDetailById(donorId: string): Observable<events[]> {
+    getDonorDetailById(donorId: string) {
         return this.http.get(this.baseURL + '/donorlist?id=' + donorId)
-            .map(this.extractDoctorObjectData)
+            .map(this.extractObjectData)
+            .catch(this.handleError);
+
+    }
+
+    /** Seeker list By Id API */
+
+    geSeekerDetailById(seekerId: string) {
+        return this.http.get(this.baseURL + '/postdetails?id=' + seekerId)
+            .map(this.extractObjectData)
             .catch(this.handleError);
 
     }
@@ -145,15 +264,21 @@ export class ServerService {
 
     /**Register Donor */
 
-    registerDonorService(donorRegisterData, imageName) {
+    registerDonorService(donorRegisterData, dob, imageName) {
         let donorData = new URLSearchParams();
+        let gender;
+        if (donorRegisterData.gender == 'Female') {
+            gender = 0;
+        } else {
+            gender = 1;
+        }
 
         donorData.set('name', donorRegisterData.name);
         donorData.set('username', donorRegisterData.username);
         donorData.set('password', donorRegisterData.password);
-        donorData.set('dob', donorRegisterData.dob);
+        donorData.set('dob', dob);
         donorData.set('age', donorRegisterData.age);
-        donorData.set('gender', donorRegisterData.gender);
+        donorData.set('gender', gender);
         donorData.set('bloodgroup', donorRegisterData.bloodgroup);
         donorData.set('weight', donorRegisterData.weight);
         donorData.set('contactnumber', donorRegisterData.contactnumber);
@@ -174,53 +299,21 @@ export class ServerService {
             .catch(this.handleError);
     }
 
-    //  registerDonorService(donorRegisterData) {
-
-    //     let formData = new FormData();
-
-    //     formData.append("name", donorRegisterData.name);
-    //     formData.append("username", donorRegisterData.username);
-    //     formData.append("password", donorRegisterData.password);
-    //     formData.append("age", donorRegisterData.dob);
-    //     formData.append("dob", donorRegisterData.age);
-    //     formData.append("gender", donorRegisterData.gender);
-    //     formData.append("bloodgroup", donorRegisterData.bloodgroup);
-    //     formData.append("weight", donorRegisterData.weight);
-    //     formData.append("contactnumber", donorRegisterData.contactnumber);
-    //     formData.append("email", donorRegisterData.email);
-    //     formData.append("state", donorRegisterData.state);
-    //     formData.append("city", donorRegisterData.city); 
-    //     formData.append("country", donorRegisterData.country); 
-    //     formData.append("phoneno1", donorRegisterData.phoneno1); 
-    //     formData.append("phoneno2", donorRegisterData.phoneno2);  
-    //     formData.append("phoneno3", donorRegisterData.phoneno3);  
-    //     formData.append("message", donorRegisterData.message);        
-    //     formData.append("userfile",  donorRegisterData.userfile[0]);  
-
-    //    return this.http.post(this.baseURL + '/donor_register',
-    //    formData
-    //         // { headers: undefined}
-    //    )
-    //         .map(this.extractData)
-    //         .catch(this.handleError);
-    // }
-
-
-
     /**Blood Request */
-    bloodRequestService(bloodRequestData) {
+    bloodRequestService(bloodRequestData, date , seekerId) {
         let requestData = new URLSearchParams();
 
         requestData.set('name', bloodRequestData.name);
         requestData.set('age', bloodRequestData.age);
         requestData.set('blood_group', bloodRequestData.bloodgroup);
-        requestData.set('date', bloodRequestData.date);
+        requestData.set('date', date);
         requestData.set('units', bloodRequestData.units);
         requestData.set('contactnumber', bloodRequestData.contactnumber);
         requestData.set('state', bloodRequestData.state);
         requestData.set('city', bloodRequestData.city);
         requestData.set('country', bloodRequestData.country);
         requestData.set('purpose', bloodRequestData.purpose);
+        requestData.set('seeker_id', seekerId);
 
         return this.http.post(this.baseURL + '/bloodrequest',
             requestData.toString(),
@@ -262,7 +355,7 @@ export class ServerService {
         return res;
     }
 
-    private extractDoctorObjectData(res: Response) {
+    private extractObjectData(res: Response) {
         let body = res.json();
         return body;
     }

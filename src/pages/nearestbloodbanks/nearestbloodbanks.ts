@@ -16,16 +16,14 @@ export class NearestbloodbanksPage {
 
 
   @ViewChild('map') mapElement: ElementRef;
-  @ViewChild('pleaseConnect') pleaseConnect: ElementRef;
+
   map: any;
   places: Array<any>;
   options: GeolocationOptions;
   currentPos: Geoposition;
 
-  selectedItem: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public maps: GoogleMapsProvider, private geolocation: Geolocation,
     public platform: Platform, public loadingCtrl: LoadingController, private network: Network) {
-    this.selectedItem = navParams.get('item');
   }
 
   ionViewDidLoad() {

@@ -6,7 +6,7 @@ import { ServerService } from '../../app/server.service';
 import { HomePage } from '../home/home';
 import { Network } from '@ionic-native/network';
 import { OfflinePage } from '../offline/offline';
-
+import { IMyDpOptions } from 'mydatepicker';
 
 @Component({
   selector: 'page-bloodrequest',
@@ -21,6 +21,9 @@ export class BloodrequestPage {
   bloodGroups = ['A+', 'B+', 'AB+','O+', 'A-', 'B-', 'AB-', 'O-'];
   countries = ['India', 'Netherland'];
   errorData : string;
+  seekerId: any;
+  userInfo: any;
+  isSeeker: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private serverService: ServerService, 
     private _cdr: ChangeDetectorRef, fb: FormBuilder,public loadingCtrl: LoadingController, private toastCtrl: ToastController,
@@ -30,6 +33,13 @@ export class BloodrequestPage {
       bloodgroup: [''],
       country: [''],
     });
+    this.seekerId = sessionStorage.getItem('userID');
+    this.userInfo = sessionStorage.getItem('userinfo');
+    if (this.userInfo == 'Seeker') {
+      this.isSeeker = true;
+    } else {
+      this.isSeeker = false;
+    }
   }  
 
   ionViewDidLoad() {
@@ -54,14 +64,20 @@ export class BloodrequestPage {
         'bloodgroup': new FormControl(null, [Validators.required]),
         'date': new FormControl(null, [Validators.required]),
         'units': new FormControl(null, [Validators.required]),
-        'contactnumber': new FormControl(null, [Validators.required]),
+        'contactnumber': new FormControl(null, [Validators.required, Validators.minLength(10),Validators.maxLength(10)]),
         'state': new FormControl(null, [Validators.required]),
         'city': new FormControl(null, [Validators.required]),        
-        'country': new FormControl(null, [Validators.required]),
+        'country': new FormControl('India', [Validators.required]),
         'purpose': new FormControl(null, [Validators.required])
       })
     });
   }
+
+  public myDatePickerOptions: IMyDpOptions = {
+    // other options...
+    // dateFormat: 'yyyy/mm/dd',
+    dateFormat: 'mm-dd-yyyy',
+  };
 
   onBloodGroupChange(): void {
     console.log("bloodgroup ::" + this.bloodRequestForm.value.bloodRequestData.bloodgroup);
@@ -77,7 +93,8 @@ export class BloodrequestPage {
   successToast() {
     let toast = this.toastCtrl.create({
       message: 'Your request is added successfully',
-      duration: 6000,
+      duration: 3000,
+      cssClass: 'loginsuccess',
       position: 'middle'
     });
     toast.onDidDismiss(() => {
@@ -89,7 +106,8 @@ export class BloodrequestPage {
   FailureToast(errorData) {
     let toast = this.toastCtrl.create({
       message: errorData,
-      duration: 6000,
+      duration: 3000,
+      cssClass: 'loginfailed',
       position: 'middle'
     });
     toast.onDidDismiss(() => {
@@ -106,12 +124,13 @@ export class BloodrequestPage {
       content: 'Please wait ...',
     });
     loader.present().then(() => {
-    this.serverService.bloodRequestService(this.bloodRequestForm.value)
+    this.serverService.bloodRequestService(this.bloodRequestForm.value , this.bloodRequestForm.value.bloodRequestData.date.formatted, this.seekerId)
       .subscribe(
         data => {
           loader.dismiss();
           if (data.status === 1) {
             this.successToast();
+            this.bloodRequestForm.reset();
           } else {
             this.errorData = "Please fill the all information correctly";            
             this.FailureToast(this.errorData);        

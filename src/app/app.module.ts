@@ -36,7 +36,13 @@ import { OfflinePage } from '../pages/offline/offline';
 import { LoginPage } from '../pages/login/login';
 import { MyDatePickerModule } from 'mydatepicker';
 import { PanicPage } from '../pages/panic/panic';
-
+import { CallNumber } from '@ionic-native/call-number';
+import { SeekerprofileeditPage } from '../pages/seekerprofileedit/seekerprofileedit';
+import { DonorprofileeditPage } from '../pages/donorprofileedit/donorprofileedit';
+import { PopoverPage } from '../pages/popover/popover';
+import { Ionic2RatingModule } from 'ionic2-rating';
+import { SeekerdetailPage } from '../pages/seekerdetail/seekerdetail';
+import { SendmailPage } from '../pages/sendmail/sendmail';
 
 @NgModule({
   declarations: [
@@ -55,13 +61,19 @@ import { PanicPage } from '../pages/panic/panic';
     BloodrequestPage,
     OfflinePage,
     LoginPage,
-    PanicPage
+    PanicPage,
+    DonorprofileeditPage,
+    SeekerprofileeditPage,
+    PopoverPage,
+    SeekerdetailPage,
+    SendmailPage
   ],
   imports: [
     BrowserModule,
     HttpModule,
     FormsModule,
     MyDatePickerModule,
+    Ionic2RatingModule,
     IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],
@@ -81,7 +93,12 @@ import { PanicPage } from '../pages/panic/panic';
     BloodrequestPage,
     OfflinePage,
     LoginPage,
-    PanicPage
+    PanicPage,
+    DonorprofileeditPage,
+    SeekerprofileeditPage,
+    PopoverPage,
+    SeekerdetailPage,
+    SendmailPage
   ],
   providers: [
     StatusBar,
@@ -99,7 +116,8 @@ import { PanicPage } from '../pages/panic/panic';
     LocationsProvider,
     Network,
     Geolocation,
-    DatePipe
+    DatePipe,
+    CallNumber
   ]
 })
 export class AppModule {}

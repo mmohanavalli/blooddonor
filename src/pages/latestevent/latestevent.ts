@@ -90,7 +90,6 @@ export class LatestEventPage implements OnInit {
         data => {
           loader.dismiss();
           this.allEvents = data;
-          console.log("title::" + this.allEvents[0].Title);
         },
         error => {
           loader.dismiss();

@@ -96,7 +96,6 @@ export class LatesteventdetailPage implements OnInit {
         data => {
           loader.dismiss();
           this.allEventsDetail = data;
-          console.log("title::" + this.allEventsDetail[0].Title);
         },
         error => {
           loader.dismiss();
