@@ -9,7 +9,7 @@ import { FilePath } from '@ionic-native/file-path';
 import { File } from '@ionic-native/file';
 import { OfflinePage } from '../offline/offline';
 import { Network } from '@ionic-native/network';
-import { IMyDateModel, IMyDpOptions } from 'mydatepicker';
+import { IMyDpOptions } from 'mydatepicker';
 
 
 declare let cordova: any;
@@ -27,12 +27,15 @@ export class DonorregisterPage {
   imageFileName: any;
   bloodGroups = ['A+', 'B+', 'AB+', 'O+', 'A-', 'B-', 'AB-', 'O-'];
   countries = ['India', 'Netherland'];
+  genderData = ['Male', 'Female'];
   isPassword: boolean;
   passwordError: string;
   numberError: string;
   isNumber: boolean;
   loading: Loading;
   imageName: string;
+  imageError: boolean;
+  imageErrorMessage: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private serverService: ServerService,
     private transfer: FileTransfer, private camera: Camera, public loadingCtrl: LoadingController,
@@ -42,6 +45,7 @@ export class DonorregisterPage {
     this.selectedItem = navParams.get('item');
     this.isPassword = false;
     this.isNumber = false;
+    this.imageError = false
     this.donorRegisterForm = fb.group({
       bloodgroup: [''],
       country: [''],
@@ -55,7 +59,8 @@ export class DonorregisterPage {
 
   public myDatePickerOptions: IMyDpOptions = {
     // other options...
-    dateFormat: 'yyyy/mm/dd',
+    // dateFormat: 'yyyy/mm/dd',
+    dateFormat: 'mm-dd-yyyy',
   };
 
   goback() {
@@ -112,7 +117,7 @@ export class DonorregisterPage {
         this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
       }
     }, (err) => {
-      this.presentToast1('Error while selecting image.');
+      this.presentToastFailure('Error while selecting image.');
     });
   }
 
@@ -127,15 +132,26 @@ export class DonorregisterPage {
     this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
       this.lastImage = newFileName;
     }, error => {
-      this.presentToast1('Error while storing file.');
+      this.presentToastFailure('Error while storing file.');
     });
   }
 
-  private presentToast1(text) {
+  private presentToastSuccess(text) {
     let toast = this.toastCtrl.create({
       message: text,
       duration: 3000,
-      position: 'top'
+      cssClass: 'loginsuccess',
+      position: 'middle'
+    });
+    toast.present();
+  }
+
+  private presentToastFailure(text) {
+    let toast = this.toastCtrl.create({
+      message: text,
+      duration: 3000,
+      cssClass: 'loginfailed',
+      position: 'middle'
     });
     toast.present();
   }
@@ -175,17 +191,18 @@ export class DonorregisterPage {
 
     // Use the FileTransfer to upload the image
     fileTransfer.upload(targetPath, url, options).then(data => {
-      console.log("upload image data" + data);
       console.log(JSON.stringify(data));
       console.log("response" + JSON.stringify(data.response));
       this.imageName = JSON.stringify(data.response);
       this.imageName = this.imageName.replace(/"/g, "");
       console.log("this.imageName" + this.imageName);
+      this.imageName = this.imageName.replace(/\\t/g, '').split('\r\n').toString();
+      console.log("this.imageName 1" + this.imageName);
       this.loading.dismissAll()
-      this.presentToast1('Image succesful uploaded.');
+      this.presentToastSuccess('Image succesfully uploaded.');
     }, err => {
       this.loading.dismissAll()
-      this.presentToast1('Error while uploading file.');
+      this.presentToastFailure('Error while uploading file.');
     });
   }
 
@@ -195,8 +212,11 @@ export class DonorregisterPage {
     this._cdr.detectChanges();
   }
 
+  onGenderChange(): void {
+    this._cdr.detectChanges();
+  }
+
   onCountryChange(): void {
-    //  let bloodgroup = this.donorRegisterForm.value.country;
     this._cdr.detectChanges();
   }
 
@@ -216,6 +236,10 @@ export class DonorregisterPage {
     if (!regExp.test(event.value)) {
       this.isNumber = true;
       this.numberError = "Please enter number only";
+      setTimeout(() => {
+        this.numberError = "";
+      }, 4000);       
+      
     } else {
       this.isNumber = false;
     }
@@ -225,8 +249,8 @@ export class DonorregisterPage {
     this.donorRegisterForm = this.fb.group({
       name: ['', Validators.required],
       username: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
+      password: ['',Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(5)])],
+      confirmPassword: ['',Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(5)])],
       dob: ['', Validators.required],
       age: ['', Validators.required],
       gender: ['', Validators.required],
@@ -237,9 +261,9 @@ export class DonorregisterPage {
       state: ['', Validators.required],
       city: ['', Validators.required],
       country: ['', Validators.required],
-      phoneno1: ['', Validators.required],
-      phoneno2: ['', Validators.required],
-      phoneno3: ['', Validators.required],
+      phoneno1: ['', Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])],
+      phoneno2: ['', Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])],
+      phoneno3: ['', Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])],
       message: ['', Validators.required]
 
     });
@@ -264,7 +288,7 @@ export class DonorregisterPage {
     let toast = this.toastCtrl.create({
       message: msg,
       duration: 3000,
-      position: 'bottom'
+      position: 'middle'
     });
 
     toast.onDidDismiss(() => {
@@ -277,7 +301,8 @@ export class DonorregisterPage {
   successToast() {
     let toast = this.toastCtrl.create({
       message: 'User added successfully',
-      duration: 6000,
+      duration: 3000,
+      cssClass: 'loginsuccess',
       position: 'middle'
     });
     toast.onDidDismiss(() => {
@@ -289,7 +314,8 @@ export class DonorregisterPage {
   FailureToast(errorData) {
     let toast = this.toastCtrl.create({
       message: errorData,
-      duration: 6000,
+      duration: 3000,
+      cssClass: 'loginfailed',
       position: 'middle'
     });
     toast.onDidDismiss(() => {
@@ -299,29 +325,39 @@ export class DonorregisterPage {
   }
 
   addDonorRegister() {
-    console.log(this.donorRegisterForm);
-    console.log("userName ::" + this.donorRegisterForm.value);
+    // console.log(this.donorRegisterForm);
+    // console.log("userName ::" + this.donorRegisterForm.value);
     let pass = this.donorRegisterForm.value.password;
     let confirmPass = this.donorRegisterForm.value.confirmPassword;
-
+    if (this.imageName == null) {
+      this.imageError = true;
+      this.imageErrorMessage = "Please upload the image";
+      setTimeout(() => {
+        this.imageErrorMessage = "";
+      }, 4000);       
+    }
     if (pass === confirmPass) {
       this.isPassword = true;
     } else {
       this.isPassword = false;
       this.passwordError = "Password not Match";
+      setTimeout(() => {
+        this.passwordError = "";
+      }, 4000);       
     }
     if (this.isPassword) {
       let loader = this.loadingCtrl.create({
         content: 'Please wait ...',
       });
       loader.present().then(() => {
-        this.serverService.registerDonorService(this.donorRegisterForm.value, this.imageName)
+        this.serverService.registerDonorService(this.donorRegisterForm.value, this.donorRegisterForm.value.dob.formatted,this.imageName)
           .subscribe(
             data => {
               console.log(data.status);
               loader.dismiss();
               if (data.status === 1) {
                 this.successToast();
+                this.donorRegisterForm.reset();
               } else if (data.status === "username invalid") {
                 let errorData = "Username is exist";
                 this.FailureToast(errorData);

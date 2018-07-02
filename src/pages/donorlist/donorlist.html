@@ -1,100 +1,123 @@
 <ion-header>
-    <ion-navbar hideBackButton="true">
-      <div class="header_left">
-        <button ion-button menuToggle>
-          <ion-icon name="menu"></ion-icon>
-        </button>
-      </div>
-      <div class="header_center"> 
+  <ion-navbar hideBackButton="true">
+    <div class="header_left">
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </div>
+    <div class="header_center">
       <ion-title>Donors</ion-title>
-      </div>
-      <div class="header_right">
-        <a href="#" class="back_btn" (click)="goback()">Back</a>
-      </div>
-    </ion-navbar>
-  </ion-header>
-  
-  <ion-content padding>
+    </div>
+    <div class="header_right">
+      <a href="#" class="back_btn" (click)="goback()">Back</a>
+    </div>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
   <div class="donors_page">
     <div class="donor_form_block">
-      <form [formGroup]="findDonorForm" (ngSubmit)="findBloodDonors()"> 
-        <ion-list formGroupName="findDonorData">         
+      <form [formGroup]="findDonorForm" (ngSubmit)="findBloodDonors()">
+        <ion-list formGroupName="findDonorData">
           <ion-item>
-              <ion-label>Blood group</ion-label>
-              <ion-select id="blooggroup" formControlName="bloodgroup" (ionChange)="onBloodGroupChange()" class="form-control">
-                <ion-option *ngFor="let bloodgroup of bloodGroups" [value]="bloodgroup">{{bloodgroup}}</ion-option>
-              </ion-select>
+            <ion-label>Blood group</ion-label>
+            <ion-select id="blooggroup" formControlName="bloodgroup" (ionChange)="onBloodGroupChange()" class="form-control">
+              <ion-option *ngFor="let bloodgroup of bloodGroups" [value]="bloodgroup">{{bloodgroup}}</ion-option>
+            </ion-select>
           </ion-item>
           <ion-item>
-              <ion-label>Country</ion-label>
-              <ion-select id="country" formControlName="country" (ionChange)="onCountryChange()" class="form-control">
-                <ion-option *ngFor="let country of countries" [value]="country">{{country}}</ion-option>
-              </ion-select>
-            </ion-item>
+            <!-- <ion-label>Country</ion-label> -->
+            <!-- <ion-select id="country" formControlName="country" (ionChange)="onCountryChange()" class="form-control">
+              <ion-option *ngFor="let country of countries" [value]="country">{{country}}</ion-option>
+            </ion-select> -->
+            <ion-input type="text"  formControlName="country"  value="India" placeholder="Country" class="form-control"  [readonly]="!editable"></ion-input>
+          </ion-item>
           <ion-item>
             <ion-input type="text" id="city" formControlName="city" placeholder="City" class="form-control"></ion-input>
           </ion-item>
 
           <ion-item class="search_btn">
-            <button class="submit_btn" type="submit" >Submit</button>
+            <button class="submit_btn" type="submit">Submit</button>
           </ion-item>
-        </ion-list>         
-      </form>            
+        </ion-list>
+      </form>
     </div>
-    <div *ngIf = "!userLogin" >
-    <div class="donor_list_info" *ngFor="let donor of donorList" >
-     
-      <div class="donor_list_grid one">
-        <div class="donor_list_img">
-          <!-- <img src="../assets/imgs/hme_donor_img1.png" />  -->
-          <img src={{IMG_URL}}{{donor.Image}}>
-        </div>
-        <ul>
-        <li>Name : <span>{{ donor.User_name }}</span></li>
-        <li>D O B : <span>{{convertDate(donor.Date_of_birth)}}</span></li>
-        </ul>
-      </div>
-      <div class="donor_list_grid two" >
-        <ul>   
-        <li>Blood : <span>{{ getBloodGroup(donor.Blood_group )}}</span></li>
-        <li>City : <span> {{ donor.City }}</span></li>
-        </ul>
-      </div>    
-      
-      <div class="donor_list_grid three"  (click) = "addLogin()">
-        <p class="hme_para_cont mail">Login</p>
-      </div> 
-    </div>
+    <div *ngIf="!userLogin">
+      <div class="donor_list_info" *ngFor="let donor of donorList">
 
-    </div> 
-
-    <div  *ngIf = "userLogin">
-    <div class="donor_list_info" *ngFor="let donor of donorList"  >
-     
-        <div class="donor_list_grid one" (click)="gotoDonorDetailPage(donor.id)">
+        <div class="donor_list_grid one">
           <div class="donor_list_img">
+            <!-- <img src="../assets/imgs/hme_donor_img1.png" />  -->
             <img src={{IMG_URL}}{{donor.Image}}>
           </div>
           <ul>
-          <li>Name : <span>{{ donor.User_name }}</span></li>
-          <li>D O B : <span>{{convertDate(donor.Date_of_birth)}}</span></li>
+            <li>Name :
+              <span>{{ donor.User_name }}</span>
+            </li>
+            <li>D O B :
+              <span>{{convertDate(donor.Date_of_birth)}}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="donor_list_grid two">
+          <ul>
+            <li>Blood :
+              <span>{{ getBloodGroup(donor.Blood_group )}}</span>
+            </li>
+            <li>City :
+              <span> {{ donor.City }}</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="donor_list_grid three login_bttn" (click)="addLogin()">
+          <a href="#">
+            <p class="hme_para_cont login_icon">Login</p>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngIf="userLogin">
+      <div class="donor_list_info" *ngFor="let donor of donorList">
+
+        <div class="donor_list_grid one" (click)="gotoDonorDetailPage(donor.id , donor.Donor_id)">
+          <div class="donor_list_img">
+            <div *ngIf="donor.Image != 'undefined' && donor.Image != null">
+              <img src={{IMG_URL}}{{donor.Image}} alt="Blooddonor App">
+            </div>
+            <div *ngIf="donor.Image == 'undefined' || donor.Image == null">
+              <img src="assets/imgs/user.png" alt="Blooddonor App">
+            </div>
+          </div>
+          <ul>
+            <li>Name :
+              <span>{{ donor.User_name }}</span>
+            </li>
+            <li>D O B :
+              <span>{{convertDate(donor.Date_of_birth)}}</span>
+            </li>
           </ul>
         </div>
         <div class="donor_list_grid two" (click)="gotoDonorDetailPage(donor.id)">
-          <ul>   
-          <li>Blood : <span>{{ getBloodGroup(donor.Blood_group )}}</span></li>
-          <li>City : <span> {{ donor.City }}</span></li>
+          <ul>
+            <li>Blood :
+              <span>{{ getBloodGroup(donor.Blood_group )}}</span>
+            </li>
+            <li>City :
+              <span> {{ donor.City }}</span>
+            </li>
           </ul>
         </div>
-        <div class="donor_list_grid three" *ngIf = "userLogin" (click)="gotoDonorDetailPage(donor.id)">
+        <div class="donor_list_grid three" *ngIf="userLogin" (click)="gotoDonorDetailPage(donor.id)">
           <p class="hme_para_cont mail">{{ donor.Email }}</p>
           <p class="hme_para_cont phone">{{ donor.Contact_number }}</p>
-        </div> 
+        </div>
       </div>
-  
-      </div> 
+
+    </div>
 
 
   </div>
-  </ion-content>
-  
+</ion-content>

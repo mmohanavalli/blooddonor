@@ -62,6 +62,10 @@ ion-header ion-navbar.toolbar { padding: 0;}
 .ion-page ion-header .toolbar-content {padding-top: 5px;}
 ion-app.md [padding] .scroll-content, ion-app.ios [padding] .scroll-content {margin-bottom: 56px;}
 
+// .header_right button.button {width:45px; background: none; box-shadow: none; height: 45px; margin: 0;}
+// .header_right button.button:hover {background: none;}
+// .header_right button.button .button-inner ion-icon {display: inline-block; height: 45px; text-indent: -9999px;  width: 45px; background: url("../assets/imgs/user_img.png") no-repeat scroll center; background-size:100% ;}
+
 .menu-inner ion-header {background: #212121 none repeat scroll 0 0;}
 .menu-inner ion-header .toolbar-title {color: #ffffff;font: 35px Univers-UltraCondensed;text-align: left; padding:0 12px; }
 .menu-inner ion-content.content {background: #323232 none repeat scroll 0 0;}
@@ -92,7 +96,8 @@ ion-content.content {background: #eeeeee none repeat scroll 0 0;  }
 .hme_grid:nth-child(3) {margin-right: 0;}
 .hme_grid h2 {color: #323232;font: 40px/40px Univers-UltraCondensed;}
 .hme_grid h2 a {color: #323232; text-decoration:none;}
-
+.hme_grid.hme_donor{width:100%;}
+.hme_grid.hme_seeker{width:49.8%;}
 .home_blk_white {background:#fff; padding:30px 0; clear: both; display: inline-block; width: 100%;}
 .home_blk_two > h2 {color: #323232;font: 50px/50px univers-ultracondensed;margin: 0;padding: 25px 0;text-align: center;text-transform: uppercase;}
 .hme_recent_blood_donor { float: left;width: 33.33%; padding:0 30px; border-right: 1px solid #dfdfdf}
@@ -114,6 +119,8 @@ ion-content.content {background: #eeeeee none repeat scroll 0 0;  }
 .hme_donor_info p.hme_para_cont { color: #ffffff; font: 30px/30px Univers-UltraCondensed; margin: 30px 0 0; padding: 10px 10px 10px 60px;}
 .hme_donor_info p.mail {background: #e80c1c  url("../assets/imgs/mail_icon.png") no-repeat 20px center;}
 .hme_donor_info p.phone {background: #323232 url("../assets/imgs/phone_icon.png")no-repeat 20px center; margin-top:2px;}
+.hme_donor_info p.login_icon ,.donor_list_grid p.hme_para_cont.login_icon {border-radius: 4px; display:inline-block;  width:auto; padding: 10px 30px 10px 60px; background: #e80c1c  url("../assets/imgs/login_icon.png") no-repeat 20px center;}
+.donor_list_grid.login_bttn {text-align: center; margin-top: 30px;}
 
 .lastest_event_grid {background: #ffffff none repeat scroll 0 0;border-bottom:1px solid #dfdfdf; float:left; padding: 20px;width: 100%;}
 .lastest_event_grid:hover {background: #f8f8f8;}
@@ -159,18 +166,19 @@ ion-app [padding] .blood_request h1 {font: 40px/40px universlt-condensedlight;ma
 
 
 .donor_detail {background: #ffffff none repeat scroll 0 0;padding: 45px 16px 16px; }
-.donor_det_info {float: left;width: 33.33%;}
+.donor_det_info {float: left;width: 50%}
 .donor_detail_info {display: inline-block;margin-top: 35px;width: 100%;}
-.donor_det_info.two {border-left: 1px solid #dfdfdf;padding: 0 0 0 30px;}
-.donor_det_info.three {border-left: 1px solid #dfdfdf;padding-left: 30px;}
+.donor_det_info.two { /*  border-left: 1px solid #dfdfdf;*/padding: 0 0 0 30px;}
+.donor_det_info.three {/*  border-left: 1px solid #dfdfdf;*/padding-left: 30px;}
 
 .donor_img_block {margin: 0 auto;max-width: 300px;position: relative;}
 .donor_img_block p {margin: 0;position: absolute;top: 45%;}
-.donor_img_block p.chat_msg {left: -25px;}
-.donor_img_block p.donor_call {right: -25px;}
+.donor_det_img img { border-radius: 50%; height: 180px;  width: 180px; padding:10px; border: 1px solid #dfdfdf;}
+.donor_img_block p.chat_msg {left: 25px;}
+.donor_img_block p.donor_call {right: 25px;}
 .donor_img_block p a {display: inline-block;height: 50px;text-indent: -9999px;width: 50px; background-size: 100% auto !important;}
-.donor_det_img {border: 1px solid #dfdfdf;border-radius: 50%;padding: 10px;}
-.donor_img_block p.chat_msg a {background: url("../assets/imgs/chat_msg.png")no-repeat center center;}
+.donor_det_img {border:none!important; text-align: center; border-radius: 50%;padding: 10px;}
+.donor_img_block p.chat_msg a {background: url("../assets/imgs/mail_icon.png")no-repeat center center;}
 .donor_img_block p.donor_call a {background: url("../assets/imgs/donor_call.png")no-repeat center center;}
 .donor_det_info li { color: #9b9b9b; font: 30px/39px universlt-condensedlight; list-style: outside none none;}
 .donor_det_info ul {margin: 0; padding: 0;}
@@ -211,16 +219,27 @@ ion-app [padding] .register h1 {font: 40px/40px universlt-condensedlight;margin-
 .register h3 span {color: #9b9b9b; font: 15px/20px universlt-condensedlight;}
 .radio-group .radio-icon.radio-checked .radio-inner {background-color: #323232;}
 .radio-group .radio-icon {border-color: #dfdfdf;}
+.regis_calender .mydp {height: 44px;border: 1px solid #dfdfdf;}
+.regis_calender .mydp input {height: 42px !important;  font: 19px/20px universlt-condensedlight !important; }
+.regis_calender {margin-bottom: 11px;}
+.regis_calender .selbtngroup {height: 42px !important;     z-index: 999999; }
+.upload_img {margin-bottom: 20px;}
+.upload_img ion-buttons button.button {background: #323232; font: 15px/20px universlt-condensedlight;}
+.preview_img {width:80px; height: 80px; border: 1px solid #dfdfdf; padding: 5px;margin-bottom: 10px;}
 
-span.error_msg {color:#ff0000;padding: 5px 10px; font:italic 13px/13px universlt-condensedlight;}
-
+span.error_msg {color:#ff0000;padding: 0px 10px 15px; font:italic 13px/13px universlt-condensedlight; display:inline-block;}
+.error_content {color:#ff0000;padding: 0px 10px 15px; font:italic 13px/13px universlt-condensedlight; display:inline-block;}
+.yes_no_div {margin-bottom: 16px;}
+.yes_no_div > span {display:inline-block; font: 19px/20px universlt-condensedlight; margin: 0 0 10px; color: #323232;  }
+.yes_no_div div {display: inline-block; margin-left: 10px;}
+.yes_no_div div span  { cursor:pointer; font: 15px/20px universlt-condensedlight; margin: 0 0 5px; color: #9b9b9b;  }
 .donor_form_block ion-list ion-item.item {float: left;width: 31.07%;  margin-right: 1%; background: rgba(0, 0, 0, 0) none repeat scroll 0 0;padding-left: 0;}
 .donor_form_block {background: #ffffff none repeat scroll 0 0;padding: 16px; display: inline-block; width: 100%;}
 .donor_form_block ion-list ion-item.item .item-inner {border: 1px solid #dfdfdf;margin-bottom: 0px;  border-radius: 3px;}
 .donor_form_block ion-list ion-item.item .item-inner ion-label {color: #9b9b9b;padding-left: 10px;}
 .donor_form_block ion-list ion-item.item.item-input.item-input-has-focus .item-inner, .donor_form_block ion-list ion-item.item.item-input.input-has-focus .item-inner , .donor_form_block ion-list ion-item.item.item-input.input-has-focus:last-child  {box-shadow:0 -1px 0 0 #323232 inset; border-bottom-color: #323232;}
 .donor_form_block ion-list ion-item.item:last-child  .item-inner{margin-bottom: 0px;}
-.donor_form_block .select .select-icon .select-icon-inner {color: #9b9b9b; margin-top: 1px;}
+.donor_form_donor_det_imgblock .select .select-icon .select-icon-inner {color: #9b9b9b; margin-top: 1px;}
 .donor_form_block .select .select-icon .select-icon-inner::before { border-bottom: 5px solid #9b9b9b;border-left: 5px solid rgba(0, 0, 0,0);border-right: 5px solid rgba(0, 0, 0, 0);content: "";left: -5px; position: absolute; top: -12px;}
 .donor_form_block ion-list ion-item.item.search_btn.item .item-inner {border: medium none; text-align: center;}
 .donor_form_block ion-list ion-item.item.search_btn.item .item-inner .submit_btn { background: #e80c1c url("../assets/imgs/search_btn.png") no-repeat scroll center center; background-size:70% auto;  border-radius: 4px; color: #ffffff; height: 48px;text-indent: -9999px;width: 100%; text-transform: uppercase;}
@@ -254,15 +273,29 @@ ion-modal {background: rgba(0, 0, 0, 0.6) none repeat scroll 0 0;}
 ion-modal .modal-wrapper  {background: #fff; max-width: 300px;min-width: 300px; height: 320px;  left: calc(50% - (300px/2));  top: calc(50% - (320px/2));overflow: visible;  contain: none; box-shadow:0 0 15px rgba(0, 0, 0, 0.6);}
 ion-modal .modal-wrapper .loginform   .login-title {padding:25px 0 15px ; color: #323232;font: 24px/24px UniversLT-CondensedBold;text-align: center;text-transform: uppercase;}
 ion-modal .modal-wrapper .loginform  .closebtn {border:none; display: inline-block;height: 20px;margin: 0;padding: 0;position: absolute;right: -10px;top: -10px;width: 20px; min-width:auto;}
-ion-modal .modal-wrapper .loginform .closebtn .button-inner { border: none; display: inline-block;text-align: left;text-indent: -99999px;background:  url("../assets/imgs/pop_clse_btn.png") no-repeat center center;background-size: 100%;  width: 20px; height: 20px;}
+// ion-modal .modal-wrapper .loginform .closebtn .button-inner { border: none; display: inline-block;text-align: left;text-indent: -99999px;background:  url("../assets/imgs/pop_clse_btn.png") no-repeat center center;background-size: 100%;  width: 20px; height: 20px;}
 ion-modal .modal-wrapper .loginform ion-item.item  {padding-left: 0px;}
 ion-modal .modal-wrapper .loginform ion-item.item .item-inner {border: 1px solid #dfdfdf;margin-bottom: 15px;  border-radius: 3px; padding:0 10px;}
-ion-modal .modal-wrapper .loginform ion-item.item .item-inner ion-label {color: #9b9b9b;padding-left: 10px;}
+ion-modal .modal-wrapper .loginform ion-item.item .item-inner ion-label {color: #9b9b9b;padding-left: 0px;}
 ion-modal .modal-wrapper .loginform ion-item.item.item-input.item-input-has-focus .item-inner, ion-modal .modal-wrapper .loginform ion-item.item.item-input.input-has-focus .item-inner , ion-modal .modal-wrapper .loginform ion-item.item.item-input.input-has-focus:last-child  {box-shadow:0 -1px 0 0 #323232 inset; border-bottom-color: #323232;} 
 ion-modal .modal-wrapper .loginform ion-item.item.loginebtn button {background: #e80c1c none repeat scroll 0 0;color: #ffffff;font: 17px/20px universlt-condensedbold;letter-spacing: 0; padding: 10px 20px; border-radius:4px; text-transform:uppercase;  margin: 0;text-align: center;width: 100%;}
 ion-modal .modal-wrapper .loginform ion-item.item.loginebtn .item-inner {display: inline-block;text-align: center; border:none; margin-bottom: 0px;  border-radius: 0px; padding: 0px;}
 ion-modal .modal-wrapper .loginform .radio-group .row {margin-top: 0px; }
 ion-modal .modal-wrapper .loginform ion-item.item.loginebtn .item-inner ion-label{margin: 0px;}
+body ion-modal.show-page .modal-wrapper {height:350px;  left: 0 !important; right: 0 !important;margin: 10% auto; top: 30px !important;}
+
+body ion-modal.donor-det-modal .modal-wrapper  {background: #fff;max-width: 500px;min-width: 500px; height: 850px!important;  left: calc(50% - (300px/2));  top: calc(50% - (400px/2))!important;overflow: visible;  contain: none; box-shadow:0 0 15px rgba(0, 0, 0, 0.6);}
+
+page-seekerdetail div#map , page-donordetail div#map {
+  border: 4px solid #dfdfdf;
+  padding: 13px;
+  margin-top: 30px;
+}
+
+ion-modal .modal-wrapper .loginform {position: relative;}
+.loginform .close_btn { position: absolute; right: -12px; z-index: 9999999; top: -30px; border: none; display: inline-block;text-align: left;text-indent: -99999px; background:  url("../assets/imgs/pop_clse_btn.png") no-repeat center center; background-size: 100% ; width: 25px; height: 25px;}
+
+.popover-wrapper .popover-viewport .close_btn { position: absolute; right: 10px; z-index: 9999999; top: 10px; border: none; display: inline-block;text-align: left;text-indent: -99999px; background:  url("../assets/imgs/pop_clse_btn.png") no-repeat center center; background-size: 100% ; width: 25px; height: 25px;}
 
 ion-alert.panic_alert {background: rgba(0, 0, 0, 0.6) none repeat scroll 0 0;}
 ion-alert.panic_alert .alert-wrapper .alert-head{display: none;}
@@ -280,8 +313,41 @@ ion-popover .popover-content { overflow: hidden;width: 100% !important; max-heig
 .radio-group .row {margin: 12px 0;}
 .radio-group label.md-check input[type="radio"] + i {width: 16px; height: 16px;border-radius:  50px;border: 2px solid #999;vertical-align:  -2px;display:  inline-block;margin-left: -20px;position: relative;}
 .radio-group label.md-check input[type="radio"]:checked + i::before {position: absolute;  border-radius:  50px; content:"";top:2px; left: 2px; right:0px; background: #e80c1c; width:8px; height:8px; } 
+ion-toast.loginsuccess  .toast-wrapper {background: #008000;}
+body ion-toast.loginsuccess  .toast-wrapper , body ion-toast.loginfailed .toast-wrapper {margin: 0 auto; max-width: 300px;}
+body ion-toast.loginfailed .toast-wrapper { top: 18% !important;}
+ion-toast  .toast-wrapper .toast-message {color: #fff; font: 18px/24px UniversLT-condensedlight; text-align: center;}
+ion-toast.loginfailed  .toast-wrapper {background: #ff0000;}
 
+ion-popover { max-width: 300px; right: 24px !important; left: auto !important;width: 100%;top: 76px !important; height: auto !important;}
+ion-popover .popover-content .item-inner .input-wrapper ion-label {font: 20px universlt-condensedlight;color: #9b9b9b;}
+ion-popover .popover-content button.item {  padding-left: 0px;}
+ion-popover .popover-content {  padding: 20px;}
+ion-popover .popover-content button.item .item-inner {  padding-right: 0px;}
+ion-popover .popover-content ion-list-header.item {  text-align:  center;  border: none;  padding-left: 0px;  margin-bottom: 0px;}
+ion-popover .popover-content ion-list-header.item .input-wrapper ion-label {  font: 30px Univers-UltraCondensed;  color: #2d2d2d;}
   
+/*Review Form*/
+.reviewform {margin-top: 40px;}
+.reviewform h2 {color: #323232;font: 19px/20px universlt-condensedlight; margin: 20px 0 20px;}
+.reviewform h3 span {color: #9b9b9b; font: 15px/20px universlt-condensedlight;}
+.reviewform ion-list ion-item.item {background: rgba(0, 0, 0, 0) none repeat scroll 0 0;padding-left: 0; border-top:none;}
+.reviewform ion-list ion-item.item .item-inner .text-input {font: 16px/20px universlt-condensedlight; margin: 0;  padding: 15px 20px;}
+.reviewform ion-list ion-item.item .item-inner {background:#fff; border: 1px solid #dfdfdf;margin-bottom: 15px;  border-radius: 3px;}
+.reviewform .review_star ion-label {color: #9b9b9b;padding-left: 10px; font: 16px/20px universlt-condensedlight;}
+.reviewform ion-list ion-item.item.item-input.item-input-has-focus .item-inner, .reviewform ion-list ion-item.item.item-input.input-has-focus .item-inner , .reviewform ion-list ion-item.item.item-input.input-has-focus:last-child  {box-shadow:0 -1px 0 0 #323232 inset; border-bottom-color: #323232;}
+.reviewform ion-list ion-item.item:last-child  .item-inner{margin-bottom: 0px;}
+.reviewform ion-list ion-item.item.reviewebtn.item .item-inner {border: medium none; text-align: left; background:transparent;}
+.reviewform ion-list ion-item.item.reviewebtn.item .item-inner button { background: #e80c1c none repeat scroll 0 0; border-radius: 4px; color: #ffffff;font: 30px/30px univers-ultracondensed;  padding: 10px 50px; text-transform: uppercase;}
+.reviewform ion-list ion-item.item.reviewebtn.item .item-inner ion-label {margin-right: 0;padding-left: 0; height: auto; }
+.reviewform .rating {padding-left:0px;}
+.reviewform .rating ion-icon {color: #e80c1c; font-size: 25px;}
+ion-list ion-item.item.captcha {width:  150px;display:  inline-block;}
+.captcha_img {  display:  inline-block;  vertical-align: top;  margin-left:  10px;}
+.captcha_img  a {margin-left: 10px;vertical-align: 12px; display: inline-block;}
+
+// page-donordetail #map  {width:100%; height: 100%;}
+
   /************ Responsive *************/
 @media screen and (max-width:1200px){
   .banner_text h1 { font: 50px/50px univers-ultracondensed;  margin: 0;}
@@ -293,7 +359,7 @@ ion-popover .popover-content { overflow: hidden;width: 100% !important; max-heig
 
 }
 @media screen and (max-width:992px){
-  .hme_recent_reg_donor, .hme_recent_blood_donor {padding: 0 15px;}
+  .hme_recent_reg_donor, .hme_recent_blood_donor {padding: 0 regis15px;}
   .home_blk_white {padding: 15px 0;}
   .header_center ion-title .toolbar-title {font: 35px/50px Univers-UltraCondensed;}
   .lastest_event_grid .event_cont h2 {font: 25px/27px UniversLT-CondensedBold;}
@@ -344,15 +410,17 @@ ion-popover .popover-content { overflow: hidden;width: 100% !important; max-heig
 
   .donor_det_info li {font: 15px/24px universlt-condensedlight;}
   .donor_det_info p.hme_para_cont {background-position: 10px center;padding-left: 40px; background-size: 20px auto;font: 18px/18px Univers-UltraCondensed;}
+  .hme_donor_info p.login_icon, .donor_list_grid p.hme_para_cont.login_icon {padding:10px 15px 10px 34px !important; background-position: 10px center; background-size:15px auto;}
   .donor_det_info.three, .donor_det_info.two {padding-left:10px;}
 
   .donor_list_grid li {font: 15px/24px universlt-condensedlight;}
-  .donor_list_grid p.hme_para_cont {background-position: 10px center;padding-left: 40px; background-size: 20px auto;font: 18px/18px Univers-UltraCondensed;}
+  .donor_list_grid p.hme_para_cont {background-position: 10px center;padding-left: 40px; background-size: 15px auto;font: 18px/18px Univers-UltraCondensed;}
   .donor_list_grid .donor_list_img {width: 50px;}
   .donor_list_grid ul {margin: 0;}
   .donor_list_grid {margin: 15px 0;}
   .donor_list_grid.three {margin: 0;}
   .donor_list_grid.one > ul {padding-left: 8px;width: calc(100% - 50px);}
+  .yes_no_div > span {font: 16px/20px universlt-condensedlight;}
 
 }
 @media screen and (max-width:1030px) and (orientation:portrait){
@@ -365,9 +433,8 @@ ion-popover .popover-content { overflow: hidden;width: 100% !important; max-heig
   .hme_recent_reg_donor, .hme_recent_blood_donor {padding: 0 5px;}
   .header_center ion-title .toolbar-title {font: 30px/45px  Univers-UltraCondensed;}
   .donor_img_block p a {height: 35px; width: 35px;}
-  .donor_img_block p.chat_msg {left: -15px;}
-  .donor_img_block p.donor_call {right: -15px;}
-
+  .hme_donor_info p.login_icon, .donor_list_grid p.hme_para_cont.login_icon {padding:10px 10px 10px 25px !important; background-position: 10px center; background-size: 10px auto;}
+  body ion-modal.donor-det-modal .modal-wrapper  {min-width: 450px!important; max-width: 450px!important; height: 500px!important; }
 
 }
 @media screen and (max-width:550px){
@@ -382,11 +449,14 @@ ion-popover .popover-content { overflow: hidden;width: 100% !important; max-heig
   .logo > img {margin: 10px 0 0;width:140px ;}
   .hme_grid_img {  margin: 0 auto;   max-width: 50px; } 
   ion-app.md [padding] .scroll-content , ion-app.ios [padding] .scroll-content { padding: 10px 10px 10px!important;}
-
+  .hme_grid.hme_seeker{width:49.5%;} 
   .lastest_event_grid .date_event {width: 75px;}
   .lastest_event_grid .event_cont {width: calc(100% - 75px);}
   .lastest_event_grid .date_event h2 {font: 24px/24px UniversLT-CondensedBold;}
   .lastest_event_grid .date_event p {font: 16px/16px universlt-condensedlight;padding: 8px;} 
+
+  .donor_img_block p.chat_msg {left: -15px;}
+  .donor_img_block p.donor_call {right: -15px;} 
   
   .lastest_event_detail {padding: 10px;}
   .lastest_event_detail h2 {font: 18px/20px universlt-condensedbold;margin-bottom: 10px;}
@@ -413,6 +483,9 @@ ion-popover .popover-content { overflow: hidden;width: 100% !important; max-heig
   .register ion-list ion-item.item .item-inner .text-input, .register ion-list ion-item.item .item-inner ion-label {font: 16px/20px universlt-condensedlight;}
   .register ion-list .radio-group > ion-label{   font:16px/20px universlt-condensedlight;}
 
+  .reviewform ion-list ion-item.item .item-inner .text-input {padding: 10px 20px;}
+  .reviewform ion-list ion-item.item.reviewebtn.item .item-inner button { font: 20px/20px univers-ultracondensed;  padding: 10px 20px; }
+  
   .donor_list_grid p.hme_para_cont {background-position: 5px center;background-size: 11px auto;font: 12px/16px Univers-UltraCondensed;margin-top: 0px;padding:5px 0px 5px 22px;}
   .donor_list_grid p.hme_para_cont {font: 10px/12px Univers-UltraCondensed;}
   .donor_list_grid li {font: 12px/20px universlt-condensedlight;}

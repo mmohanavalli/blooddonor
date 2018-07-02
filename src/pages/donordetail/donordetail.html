@@ -1,9 +1,3 @@
-<!--
-  Generated template for the DonordetailPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
   <ion-navbar hideBackButton="true">
     <div class="header_left">
@@ -12,7 +6,7 @@
       </button>
     </div>
     <div class="header_center">
-      <ion-title>Johnny</ion-title>
+      <ion-title>{{donorName}}</ion-title>
     </div>
     <div class="header_right">
       <a href="#" class="back_btn" (click)="goBack()">Back</a>
@@ -24,15 +18,24 @@
   <div class="donor_detail" *ngFor="let donorDetail of donorDetailInfo">
     <div class="donor_img_block">
       <p class="chat_msg">
-        <a href="#">Message</a>
+        <!-- <a href="sms://{{donorDetail.Contact_number}}">Message</a> -->
+        <a href="#" (click)="presentMail()">Message</a>
+
+        <!-- <a href="#" (click) = "gotoSendEmailPage()">Message</a> -->
       </p>
       <div class="donor_det_img">
-        <!-- <img src="assets/imgs/donor_det_img.png"> -->
-        <img src={{IMG_URL}}{{donorDetail.Image}}>
-
+        <!-- <img src={{IMG_URL}}{{donorDetail.Image}}> -->
+        <div *ngIf="donorDetail.Image != 'undefined' && donorDetail.Image != null">
+          <img src={{IMG_URL}}{{donorDetail.Image}} alt="Blooddonor App">
+        </div>
+        <div *ngIf="donorDetail.Image == 'undefined' || donorDetail.Image == null">
+          <img src="assets/imgs/user.png" alt="Blooddonor App">
+        </div>
       </div>
       <p class="donor_call">
-        <a href="#">Message</a>
+        <!-- <a href="tel:+1234567890" (click) = "makeCall();">Message</a> -->
+        <a href="tel:+{{donorDetail.Contact_number}}">Message</a>
+
       </p>
     </div>
     <div class="donor_detail_info">
@@ -70,5 +73,66 @@
         <p class="hme_para_cont phone">{{donorDetail.Contact_number}}</p>
       </div>
     </div>
+  </div>
+
+  <div class="reviewform" *ngIf="isSeeker">
+    <h2 class="login-title">WRITE A REVIEW</h2>
+    <form [formGroup]="reviewForm" (ngSubmit)="review()">
+      <ion-list>
+        <ion-item>
+          <ion-input type="text" formControlName="name" placeholder="Name" class="form-control"></ion-input>
+        </ion-item>
+
+        <span *ngIf="!reviewForm.get('name').valid && reviewForm.get('name').touched" class="error_msg">Please fill the user name </span>
+
+        <ion-item>
+          <ion-input type="email" formControlName="email" placeholder="E-mail" class="form-control"></ion-input>
+        </ion-item>
+
+        <span *ngIf="!reviewForm.get('email').valid && reviewForm.get('email').touched" class="error_msg">Please fill the user name </span>
+
+        <!-- <ion-item>
+          <ion-input type="text" formControlName="ratings" placeholder="Password" class="form-control"></ion-input>
+        </ion-item>
+
+        <span *ngIf="!reviewForm.get('ratings').valid && reviewForm.get('ratings').touched" class="error_msg">Please fill the password</span> -->
+        <div class="review_star">
+          <ion-label>Ratings</ion-label>
+          <rating formControlName="ratings" readOnly="false" max="5" emptyStarIconName="star-outline" halfStarIconName="star-half"
+            starIconName="star" nullable="false" (ionChange)="onModelChange($event)"></rating>
+        </div>
+
+
+        <ion-item class="form-group">
+          <ion-textarea formControlName="review" placeholder="Message"></ion-textarea>
+        </ion-item>
+
+        <span *ngIf="!reviewForm.get('review').valid && reviewForm.get('review').touched" class="error_msg">Please fill the user name </span>
+        <div>
+        <ion-item class="form-group captcha">
+          <ion-input type="text" class="form-control" id="code" formControlName="userCaptcha" name="code" placeholder="Type the code"></ion-input>
+        </ion-item>
+        <div class="captcha_img">
+          <img src="{{captchaImageURL}}" alt="Blooddonor App" style="height: 50px;">
+          <a href="#" (click)="getCaptcha()">
+              <img src="assets/imgs/refresh.png" />
+            </a>
+          </div>  
+        </div>
+
+
+        <span *ngIf="!reviewForm.get('userCaptcha').valid && reviewForm.get('userCaptcha').touched" class="" style="color:red; ">This field is required.</span>
+
+
+        <ion-item class="reviewebtn">
+          <!-- <button type="submit" [disabled]="!reviewForm.valid" type="submit">Submit</button> -->
+          <button type="submit" type="submit">Submit</button>
+        </ion-item>
+      </ion-list>
+    </form>
+  </div>
+
+  <div #map id="map" style="height: 300px;"></div>
+  <div style="width : 100% ;height: 60%">
   </div>
 </ion-content>

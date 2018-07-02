@@ -26,11 +26,30 @@ export class DonorlistPage {
   userLogin: boolean;
   pageName: string
   constructor(public navCtrl: NavController, public navParams: NavParams, private serverService: ServerService,
-    private _cdr: ChangeDetectorRef, fb: FormBuilder, public loadingCtrl: LoadingController, public modalCtrl: ModalController, private toastCtrl: ToastController,
+    private _cdr: ChangeDetectorRef, public fb: FormBuilder, public loadingCtrl: LoadingController, public modalCtrl: ModalController, private toastCtrl: ToastController,
     private network: Network) {
+    // this.userLogin = false;
+    // this.pageName = "donorlist"
+    // this.selectedItem = navParams.get('item');
+    // this.loginStatus = sessionStorage.getItem('loginstatus');
+    // console.log(" loginStatus " + this.loginStatus);
+    // if (this.loginStatus != 'true') {
+    //   // this.addLogin();
+    //   this.userLogin = false;
+    // } else {
+    //   this.userLogin = true;
+    // }
+    // this.IMG_URL = 'https://blooddonorspot.com/images/';
+    this.findDonorForm = fb.group({
+      bloodgroup: [''],
+      country: [''],
+    });
+  }
+
+  ionViewWillEnter() {
     this.userLogin = false;
-    this.pageName = "donorlist"
-    this.selectedItem = navParams.get('item');
+    this.pageName = "donorlist";
+    this.selectedItem = this.navParams.get('item');
     this.loginStatus = sessionStorage.getItem('loginstatus');
     console.log(" loginStatus " + this.loginStatus);
     if (this.loginStatus != 'true') {
@@ -40,10 +59,10 @@ export class DonorlistPage {
       this.userLogin = true;
     }
     this.IMG_URL = 'https://blooddonorspot.com/images/';
-    this.findDonorForm = fb.group({
-      bloodgroup: [''],
-      country: [''],
-    });
+    // this.findDonorForm = this.fb.group({
+    //   bloodgroup: [''],
+    //   country: [''],
+    // });
   }
 
   ionViewDidLoad() {
@@ -60,11 +79,12 @@ export class DonorlistPage {
     // let addWeatherModal = this.modalCtrl.create(LoginPage, { showBackdrop: true, enableBackdropDismiss: true });
     let addWeatherModal = this.modalCtrl.create(LoginPage, { name: this.pageName });
     addWeatherModal.onDidDismiss(data => {
-      this.navCtrl.push(DonorlistPage);
-      this.navCtrl.popToRoot();
+      // this.navCtrl.push(DonorlistPage);
+      // this.navCtrl.popToRoot();
+      this.ionViewWillEnter();
     });
     addWeatherModal.present();
-   
+
   }
 
   ngOnInit() {
@@ -75,7 +95,7 @@ export class DonorlistPage {
       'findDonorData': new FormGroup({
         'bloodgroup': new FormControl(null, [Validators.required]),
         'city': new FormControl(null, [Validators.required]),
-        'country': new FormControl(null, [Validators.required])
+        'country': new FormControl('India', [Validators.required])
       })
     });
   }
@@ -118,7 +138,6 @@ export class DonorlistPage {
           data => {
             loader.dismiss();
             this.donorList = data;
-            // console.log("title::" + this.donorList[0].Title);
           },
           error => {
             loader.dismiss();
@@ -129,8 +148,9 @@ export class DonorlistPage {
     });
   }
 
-  gotoDonorDetailPage(donorId) {
+  gotoDonorDetailPage(id,donorId) {
     this.navCtrl.push(DonordetailPage, {
+      id: id,
       donorId: donorId
     });
   }
@@ -166,9 +186,10 @@ export class DonorlistPage {
         this.serverService.getFindDonor(this.findDonorForm.value, bloodGroup)
           .subscribe(
             data => {
-
               this.donorList = data;
-              if (this.donorList.length == 0) {
+              if (this.donorList.length != 0) {
+                loader.dismiss();
+              } else {
                 loader.dismiss();
                 this.errorData = "Searching content is not available, search again!";
                 this.FailureToast(this.errorData);
@@ -193,6 +214,7 @@ export class DonorlistPage {
     let toast = this.toastCtrl.create({
       message: errorData,
       duration: 6000,
+      cssClass: 'loginfailed',
       position: 'middle'
     });
     toast.onDidDismiss(() => {
